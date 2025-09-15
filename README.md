@@ -1,4 +1,4 @@
-# 🌸 Joie Beauty
+# 🌸 Joie Beauty  
 
 [Joie Beauty](https://joiebeauty.co/) is a capsule beauty brand focused on **seasonal color analysis**, **curated lip products**, and **personalized beauty experiences**.  
 Our philosophy: *“Wear your colours, see the difference.”*
