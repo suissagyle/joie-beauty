@@ -1,0 +1,28 @@
+<p class="product__total">
+  <strong>Total:</strong>
+  <span id="DynamicTotalPrice-{{ section.id }}">
+    {{ product.selected_or_first_available_variant.price | money }}
+  </span>
+</p>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const quantityInput = document.querySelector('#Quantity-{{ section.id }}');
+    const priceDisplay = document.querySelector('#DynamicTotalPrice-{{ section.id }}');
+
+    if (!quantityInput || !priceDisplay) return;
+
+    const basePrice = {{ product.selected_or_first_available_variant.price | money_without_currency | replace: ',', '' }};
+    const currencySymbol = '{{ cart.currency.symbol }}';
+
+    function updateTotalPrice() {
+      const qty = parseInt(quantityInput.value) || 1;
+      const total = (basePrice * qty).toFixed(2);
+      priceDisplay.textContent = currencySymbol + total;
+    }
+
+    quantityInput.addEventListener('input', updateTotalPrice);
+    quantityInput.addEventListener('change', updateTotalPrice);
+  });
+</script>
+

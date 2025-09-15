@@ -1,0 +1,119 @@
+{% schema %}
+{
+  "name": "Product Variant Gallery",
+  "tag": "section",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Product Variant Gallery"
+    }
+  ]
+}
+{% endschema %}
+
+<div class="variant-gallery">
+  <div class="gallery-left">
+    <img id="mainImage" class="main-image" src="" alt="Main product image">
+    <div class="thumbnail-wrapper" id="thumbnailWrapper"></div>
+  </div>
+
+  <div class="gallery-right">
+    <div class="swatches">
+      {% assign option_index = 0 %}
+      {% for option in product.options_with_values %}
+        {% if option.name == 'Color' %}
+          {% assign option_index = forloop.index0 %}
+          {% for value in option.values %}
+            {% assign color_variant = product.variants | where: "option" | where: "option" | where: "option" %}
+            {% assign variant = product.variants | where: "option" | where: "option" | where: "option" %}
+            {% assign variant = product.variants | where: "option" | where: option_index, value | first %}
+            {% if variant %}
+              <div class="swatch" style="background-color: {{ value | downcase }};" data-variant-id="{{ variant.id }}" title="{{ value }}"></div>
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+      {% endfor %}
+    </div>
+    <h2>{{ product.title }}</h2>
+    <p>{{ product.description | strip_html | truncate: 150 }}</p>
+    <button class="add-to-cart-button" onclick="document.querySelector('[name=id]').value = window.currentVariantId; document.querySelector('form[action=\"/cart/add\"]').submit();">
+      Add to Cart
+    </button>
+  </div>
+</div>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox">
+  <img src="" id="lightboxImage">
+</div>
+
+<form method="post" action="/cart/add" style="display:none;">
+  <input type="hidden" name="id" value="">
+</form>
+
+<style>
+/* (Paste the full responsive CSS from previous message here) */
+</style>
+
+<script>
+  const productVariants = {{ product.variants | json }};
+  const variantMetafields = {
+    {% for variant in product.variants %}
+      "{{ variant.id }}": [
+        {% for image in variant.metafields.custom.variant_gallery %}
+          "{{ image | image_url: width: 1200 }}"{% unless forloop.last %},{% endunless %}
+        {% endfor %}
+      ]{% unless forloop.last %},{% endunless %}
+    {% endfor %}
+  };
+
+  const mainImage = document.getElementById("mainImage");
+  const thumbnailWrapper = document.getElementById("thumbnailWrapper");
+  const lightbox = document.getElementById("lightbox");
+  const lightboxImage = document.getElementById("lightboxImage");
+  let currentVariantId = productVariants[0].id;
+
+  function updateGallery(variantId) {
+    currentVariantId = variantId;
+    const images = variantMetafields[variantId];
+    if (!images || images.length === 0) return;
+
+    mainImage.src = images[0];
+    thumbnailWrapper.innerHTML = '';
+
+    images.forEach((imgUrl, index) => {
+      const thumb = document.createElement('img');
+      thumb.src = imgUrl;
+      thumb.classList.add('thumbnail');
+      if (index === 0) thumb.classList.add('active');
+      thumb.setAttribute('data-large', imgUrl);
+      thumb.addEventListener('click', () => {
+        document.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active'));
+        thumb.classList.add('active');
+        mainImage.src = imgUrl;
+      });
+      thumbnailWrapper.appendChild(thumb);
+    });
+  }
+
+  document.querySelectorAll('.swatch').forEach(swatch => {
+    swatch.addEventListener('click', () => {
+      document.querySelectorAll('.swatch').forEach(s => s.classList.remove('active'));
+      swatch.classList.add('active');
+      const variantId = swatch.getAttribute('data-variant-id');
+      updateGallery(variantId);
+    });
+  });
+
+  mainImage.addEventListener('click', () => {
+    lightboxImage.src = mainImage.src;
+    lightbox.classList.add('active');
+  });
+
+  lightbox.addEventListener('click', () => {
+    lightbox.classList.remove('active');
+  });
+
+  // Load first variant gallery by default
+  updateGallery(currentVariantId);
+</script>

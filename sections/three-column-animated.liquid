@@ -1,0 +1,277 @@
+{% schema %}
+{
+  "name": "Three Column Animated",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Global Color Scheme"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background Image"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "row1_col1",
+      "name": "Row 1 Col 1: Title",
+      "settings": [
+        { "type": "text", "id": "caption", "label": "Caption" },
+        { "type": "text", "id": "title", "label": "Title" },
+        { "type": "textarea", "id": "paragraph", "label": "Paragraph" },
+        { "type": "text", "id": "button_label", "label": "Button Label" },
+        { "type": "url", "id": "button_link", "label": "Button Link" },
+        { "type": "text", "id": "text_link", "label": "Text Link" },
+        { "type": "url", "id": "text_link_url", "label": "Text Link URL" }
+      ]
+    },
+    {
+      "type": "row1_col2",
+      "name": "Row 1 Col 2: Card",
+      "settings": [
+        { "type": "image_picker", "id": "animated_image", "label": "Animated Image" },
+        { "type": "image_picker", "id": "cover_image", "label": "Cover Image" }
+      ]
+    },
+    {
+      "type": "row1_col3",
+      "name": "Row 1 Col 3: List",
+      "settings": [
+        { "type": "textarea", "id": "paragraph1", "label": "Paragraph 1" },
+        { "type": "textarea", "id": "paragraph2", "label": "Paragraph 2" },
+        { "type": "textarea", "id": "paragraph3", "label": "Paragraph 3" },
+        { "type": "textarea", "id": "paragraph4", "label": "Paragraph 4" },
+        { "type": "textarea", "id": "paragraph5", "label": "Paragraph 5" }
+      ]
+    }
+  ],
+  "presets": [
+    { "name": "Three Column Animated", "blocks": [ { "type": "row1_col1" }, { "type": "row1_col2" }, { "type": "row1_col3" } ] }
+  ]
+}
+{% endschema %}
+
+<style>
+  .two-row-section {
+    flex-direction: column;
+    padding: 20px;
+    {% if section.settings.background_image %}
+       background-image: url('{{ section.settings.background_image | img_url: 'large' }}');
+    {% endif %}
+  }
+  .column {
+    flex: 1;
+    min-height: 680px;
+    padding: 20px;
+  }
+  .two-row-section li {
+    list-style: none;
+    position: relative;
+    padding-left:50px;
+    color: #000;
+    text-shadow: 0px 2px 5px rgba(255, 255, 255, 0.05);
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 275;
+    line-height: 26px; /* 162.5% */
+    letter-spacing: 0.75px;
+    border-bottom: 1px solid #00000021;
+    padding: 20px;
+  }
+  .two-row-section li:before {
+    width: 8px;
+    height: 8px;
+    content:"\f111"; 
+    font-family: FontAwesome;
+    position: absolute;
+    left: 0;
+    color: #F7A8A8;
+    font-size: 8px;
+  }
+   .two-row-section .caption li {
+    border-bottom: 0;
+    padding: 0 15px;
+  }
+
+  .two-row-section .caption li::before {
+    color: #000;
+    width: 3px;
+    height: 3px;
+    font-size: 7px;
+    padding: 0;
+  }
+
+  .two-row-section .caption li:empty::before {
+    display: none;
+  }
+
+  .two-row-section.animated p {
+    font-size: 20px;
+  }
+  
+  .animated-image-container {
+    position: relative;
+    width: 290px;
+    margin: 120px auto;
+  }
+  .show-image {
+    transition: all 0.7s ease-in-out;
+  }
+  .cover-image {
+    position: absolute;
+    bottom: 65px;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    transition: all 0.7s ease-in-out;
+  }
+
+  .cover-image.fly {
+    transform: translateY(-80%);
+    opacity: 0;
+  }
+  .animated-image-container:hover .show-image{
+    transform: scale(0.9);
+  }
+
+  .video-container {
+    position: relative;
+    width: 100%;
+    max-width: 373px;
+    height: 678px;
+    border-radius: 15px;
+    overflow: hidden;
+  }
+  .video-container .video-cover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    background-size: cover;
+    background-repeat: no-repeat;
+    transition: opacity 0.5s ease;
+  }
+  .video-container .video-cover.fade-out {
+    opacity: 0;
+    pointer-events: none;
+  }
+  .play-button {
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 50%;
+    font-size: 24px;
+  }
+
+  @media(max-width: 1024px) {
+    .two-row-section .column {
+      flex: inherit;
+      min-height: 450px;
+      align-content: baseline;
+    }
+    .two-row-section.animated p {
+      font-size: 20px;
+    }
+    .cover-image {
+      bottom: 30px !important;
+    }
+    .animated-image-container {
+      position: relative;
+      width: 188px !important;
+      height: 276px;
+      text-align: center;
+      margin: 50px auto 0!important;
+    }
+    .animated-image-container img {
+      height: 100%;
+    }
+    .no-block-mobile {
+      justify-content: left;
+    }
+  }
+</style>
+
+<div class="two-row-section animated d-flex color-{{ section.settings.color_scheme }}"  style="background-color: {{ section.settings.color_scheme }};">
+  <div class="main-container d-flex ">
+    <div class="column w-33 d-flex flex-wrap align-items-baseline align-content-center">
+      <span class="w-100">
+        {% if section.blocks[0].settings.caption %}
+        <!-- <ul class="caption m-0">
+          <li>{{ section.blocks[0].settings.caption }}</li>
+        </ul> -->
+        {% endif %}
+        <h2 class="m-0 mt-6">{{ section.blocks[0].settings.title }}</h2>
+        <p>{{ section.blocks[0].settings.paragraph }}</p>
+        <span class="w-90 d-flex no-block-mobile justify-left align-items-center">
+          <a href="{{ section.blocks[0].settings.button_link }}" class="buy-button">{{ section.blocks[0].settings.button_label }}</a>
+          <a href="{{ section.blocks[0].settings.text_link_url }}" class="ms-4">{{ section.blocks[0].settings.text_link }}</a>
+        </span>
+      </span>
+    </div>
+    {% if section.blocks[1] %}
+    <div class="column w-33">
+      <div class="animated-image-container">
+        <img src="{{ section.blocks[1].settings.animated_image | img_url: 'large' }}" alt="Animated Image">
+        <img class="cover-image" src="{{ section.blocks[1].settings.cover_image | img_url: 'large' }}" alt="Cover Image">
+      </div>
+    </div>
+    {% endif %}
+    {% if section.blocks[2] %}
+    <div class="column w-33 align-content-center">
+      <ul>
+        <li>{{ section.blocks[2].settings.paragraph1 }}</li>
+        <li>{{ section.blocks[2].settings.paragraph2 }}</li>
+        <li>{{ section.blocks[2].settings.paragraph3 }}</li>
+        <li>{{ section.blocks[2].settings.paragraph4 }}</li>
+        <li>{{ section.blocks[2].settings.paragraph5 }}</li>
+      </ul>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const coverImage = document.querySelector(".cover-image");
+  
+    if (!coverImage) return;
+  
+    const observer = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            setTimeout(() => {
+              coverImage.classList.add('fly');
+            }, 1000);
+          } else {
+            coverImage.classList.remove('fly');
+          }
+        });
+      },
+      {
+        root: null,
+        threshold: 0.5 // Adjust this if needed (e.g., 0.3 for smaller elements)
+      }
+    );
+  
+    observer.observe(coverImage);
+  });
+
+  
+  function playVideo(cover) {
+    var frame = document.getElementById('videoFrame');
+    var videoUrl = "{{ section.blocks[1].settings.video }}";
+    frame.src = videoUrl.replace("watch?v=", "embed/");
+    frame.style.display = "block";
+    cover.classList.add("fade-out");
+  }
+</script>

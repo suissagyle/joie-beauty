@@ -1,0 +1,95 @@
+{% schema %}
+{
+  "name": "Variant Color Swatches",
+  "tag": "section",
+  "templates": ["product"],
+  "blocks": [
+    {
+      "type": "variant_swatches",
+      "name": "Variant Swatches",
+      "limit": 1
+    }
+  ],
+  "settings": [],
+  "presets": [
+    {
+      "name": "Variant Color Swatches",
+      "category": "Product"
+    }
+  ]
+}
+{% endschema %}
+
+{% if section.blocks.size > 0 %}
+  <div class="variant-swatches" style="display: flex; gap: 10px; margin-bottom: 20px;">
+    {% for variant in product.variants %}
+      {% assign color = variant.metafields.custom.color_swatch %}
+      {% assign collection_name = variant.metafields.custom.collection_name %}
+      {% assign color_name = variant.metafields.custom.color_name %}
+      {% assign variant_images = variant.metafields.custom.variant_images %}
+
+      <div 
+        class="color-swatch" 
+        style="background-color: {{ color }};"
+        data-variant-id="{{ variant.id }}"
+        data-images='{{ variant_images | json }}'
+        data-collection-name="{{ collection_name }}"
+        data-color-name="{{ color_name }}"
+        data-price="{{ variant.price | money }}">
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
+
+<div id="product-info">
+  <div class="product-price"></div>
+  <div class="product-collection-name"></div>
+  <div class="product-color-name"></div>
+</div>
+
+<div id="product-gallery" style="display: flex; gap: 10px; flex-wrap: wrap;"></div>
+
+<style>
+  .color-swatch {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 2px solid #ccc;
+    cursor: pointer;
+  }
+  .color-swatch:hover,
+  .color-swatch.active {
+    border-color: #000;
+  }
+  #product-gallery img {
+    width: 80px;
+    height: auto;
+    border: 1px solid #eee;
+  }
+</style>
+
+<script>
+  document.querySelectorAll('.color-swatch').forEach(swatch => {
+    swatch.addEventListener('click', function() {
+      document.querySelectorAll('.color-swatch').forEach(el => el.classList.remove('active'));
+      this.classList.add('active');
+
+      const images = JSON.parse(this.dataset.images);
+      const collectionName = this.dataset.collectionName;
+      const colorName = this.dataset.colorName;
+      const price = this.dataset.price;
+
+      const gallery = document.getElementById('product-gallery');
+      gallery.innerHTML = '';
+      images.forEach(img => {
+        const image = document.createElement('img');
+        image.src = img;
+        gallery.appendChild(image);
+      });
+
+      document.querySelector('.product-price').textContent = price;
+      document.querySelector('.product-collection-name').textContent = collectionName;
+      document.querySelector('.product-color-name').textContent = colorName;
+    });
+  });
+</script>

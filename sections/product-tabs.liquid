@@ -1,0 +1,206 @@
+{{ 'section-main-product.css' | asset_url | stylesheet_tag }}
+
+{% schema %}
+{
+  "name": "Product Tabs Section",
+  "settings": [
+    {
+      "type": "select",
+      "id": "media_fit",
+      "options": [
+        {
+          "value": "contain",
+          "label": "t:sections.main-product.settings.media_fit.options__1.label"
+        },
+        {
+          "value": "cover",
+          "label": "t:sections.main-product.settings.media_fit.options__2.label"
+        }
+      ],
+      "default": "contain",
+      "label": "t:sections.main-product.settings.media_fit.label"
+    },
+    {
+      "type": "select",
+      "id": "gallery_layout",
+      "options": [
+        {
+          "value": "stacked",
+          "label": "t:sections.main-product.settings.gallery_layout.options__1.label"
+        },
+        {
+          "value": "columns",
+          "label": "t:sections.main-product.settings.gallery_layout.options__2.label"
+        },
+        {
+          "value": "thumbnail",
+          "label": "t:sections.main-product.settings.gallery_layout.options__3.label"
+        },
+        {
+          "value": "thumbnail_slider",
+          "label": "t:sections.main-product.settings.gallery_layout.options__4.label"
+        }
+      ],
+      "default": "stacked",
+      "label": "t:sections.main-product.settings.gallery_layout.label"
+    },
+    {
+      "type": "select",
+      "id": "media_position",
+      "options": [
+        {
+          "value": "left",
+          "label": "t:sections.main-product.settings.media_position.options__1.label"
+        },
+        {
+          "value": "right",
+          "label": "t:sections.main-product.settings.media_position.options__2.label"
+        }
+      ],
+      "default": "left",
+      "label": "t:sections.main-product.settings.media_position.label",
+      "info": "t:sections.main-product.settings.media_position.info"
+    },
+    {
+      "type": "select",
+      "id": "image_zoom",
+      "options": [
+        {
+          "value": "lightbox",
+          "label": "t:sections.main-product.settings.image_zoom.options__1.label"
+        },
+        {
+          "value": "hover",
+          "label": "t:sections.main-product.settings.image_zoom.options__2.label"
+        },
+        {
+          "value": "none",
+          "label": "t:sections.main-product.settings.image_zoom.options__3.label"
+        }
+      ],
+      "default": "lightbox",
+      "label": "t:sections.main-product.settings.image_zoom.label",
+      "info": "t:sections.main-product.settings.image_zoom.info"
+    },
+    {
+      "type": "select",
+      "id": "mobile_thumbnails",
+      "options": [
+        {
+          "value": "columns",
+          "label": "t:sections.main-product.settings.mobile_thumbnails.options__1.label"
+        },
+        {
+          "value": "show",
+          "label": "t:sections.main-product.settings.mobile_thumbnails.options__2.label"
+        },
+        {
+          "value": "hide",
+          "label": "t:sections.main-product.settings.mobile_thumbnails.options__3.label"
+        }
+      ],
+      "default": "hide",
+      "label": "t:sections.main-product.settings.mobile_thumbnails.label"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "tab",
+      "name": "Product Tab",
+      "settings": [
+        {
+          "type": "text",
+          "id": "tab_name",
+          "label": "Tab Name"
+        },
+        {
+          "type": "product",
+          "id": "selected_product",
+          "label": "Select Product"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Tabs Section",
+      "category": "Product"
+    }
+  ]
+}
+{% endschema %}
+
+<div class="product-tabs-section mt-6">
+ 
+  <div class="left-column">
+    {% for block in section.blocks %}
+      {% assign product = all_products[block.settings.selected_product] %}
+       <div class="product-gallery">
+      {% render 'product-media-gallery', product: product %}
+    </div>
+      <div class="product-gallery" product-id="{{ product.id }}" data-tab="{{ block.id }}" {% if forloop.first %}style="display:block;"{% else %}style="display:none;"{% endif %}>
+        {% for image in product.images %}
+          <img src="{{ image | img_url: 'large' }}" alt="{{ product.title }}" />
+        {% endfor %}
+      </div>
+    {% endfor %}
+  </div>
+  <div class="right-column">
+    <div class="tabs">
+      {% for block in section.blocks %}
+        <button class="tab-button" data-tab="{{ block.id }}" {% if forloop.first %}class="active"{% endif %}>{{ block.settings.tab_name }}</button>
+      {% endfor %}
+    </div>
+    {% for block in section.blocks %}
+      {% assign product = all_products[block.settings.selected_product] %}
+      <div class="tab-content" data-tab="{{ block.id }}" {% if forloop.first %}style="display:block;"{% else %}style="display:none;"{% endif %}>
+        <h2>{{ product.title }}</h2>
+        <p>{{ product.description }}</p>
+        <p class="price">{{ product.price | money }}</p>
+        <form method="post" action="/cart/add">
+          <input type="hidden" name="id" value="{{ product.variants.first.id }}">
+          <button type="submit">Add to Cart</button>
+        </form>
+        <button class="buy-button" onclick="window.location.href='/checkout'">Buy Now</button>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+<style>
+  .product-tabs-section { display: flex; }
+  .left-column { width: 50%; }
+  .right-column { width: 50%; }
+  .tabs { display: flex; }
+  .tab-button { 
+    margin-right: 10px; 
+    cursor: pointer; 
+    margin-right: 10px;
+    color: #000;
+    text-align: center;
+    font-size: 13px;
+    border: 0;
+    background: none;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    letter-spacing: var(--Font-Letter-spacing-Small-title---H3, 0.25px);
+  }
+  .tab-button.active { font-weight: bold; }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+</style>
+
+<script>
+  document.querySelectorAll('.tab-button').forEach(button => {
+    button.addEventListener('click', function() {
+      document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(content => content.style.display = 'none');
+      document.querySelectorAll('.product-gallery').forEach(gallery => gallery.style.display = 'none');
+      
+      this.classList.add('active');
+      document.querySelector(`.tab-content[data-tab='${this.dataset.tab}']`).style.display = 'block';
+      document.querySelector(`.product-gallery[data-tab='${this.dataset.tab}']`).style.display = 'block';
+    });
+  });
+</script>

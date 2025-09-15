@@ -1,0 +1,365 @@
+{% schema %}
+{
+  "name": "Popup Newsletter",
+  "settings": [
+    { "type": "checkbox", "id": "enable_popup", "label": "Enable popup", "default": true },
+    { "type": "number", "id": "popup_delay", "label": "Delay before showing (in seconds)", "default": 3 },
+    { "type": "text", "id": "headline", "label": "Headline", "default": "Subscribe to our newsletter" },
+    { "type": "textarea", "id": "subtext", "label": "Subtext", "default": "Get exclusive offers and updates." },
+    { "type": "text", "id": "caption", "label": "Caption below form", "default": "We respect your inbox. No spam." },
+    { "type": "text", "id": "button_label", "label": "Button Label", "default": "Subscribe" },
+    { "type": "image_picker", "id": "popup_image", "label": "Right Column Banner Image" },
+    { "type": "color", "id": "background_color", "label": "Background color", "default": "#ffffff" }
+  ],
+  "presets": [
+    { "name": "Popup Newsletter", "category": "Promotional" }
+  ]
+}
+{% endschema %}
+
+{% if section.settings.enable_popup %}
+  <div id="popup-newsletter" style="display: none;">
+    <div class="popup-overlay"></div>
+    <div id="popup-wrapper" style="background-color: {{ section.settings.background_color }}">
+      <div class="popup-left">
+        <button class="popup-close" onclick="document.getElementById('popup-newsletter').style.display = 'none'">
+          <svg xmlns="http://www.w3.org/2000/svg" width="45" height="45" viewBox="0 0 45 45" fill="none">
+            <mask id="mask0_8099_2665" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="45" height="45">
+            <rect width="44.54" height="44.54" fill="#D9D9D9"/>
+            </mask>
+            <g mask="url(#mask0_8099_2665)">
+            <path d="M14.7536 30.7605L13.7793 29.7862L21.2954 22.27L13.7793 14.8003L14.7536 13.826L22.2697 21.3421L29.7395 13.826L30.7138 14.8003L23.1977 22.27L30.7138 29.7862L29.7395 30.7605L22.2697 23.2444L14.7536 30.7605Z" fill="#FF8484"/>
+            </g>
+          </svg>
+        </button>
+        <h2>{{ section.settings.headline }}</h2>
+        <p>{{ section.settings.subtext }}</p>
+        <form method="post" action="/contact#popup-wrapper" accept-charset="UTF-8" id="popup-newsletter-form">
+          <input type="hidden" name="form_type" value="customer">
+          <input type="hidden" name="utf8" value="✓">
+          
+            <div class="form-inline">
+               <span class="email-icon">
+                {% render 'email-icon-pink' %}
+              </span>
+              <input type="email" name="contact[email]" id="popup-email" placeholder="Email" required>
+              <!-- Hidden input for country detection -->
+              <input type="hidden" id="country-data" value="">
+              <button type="submit">{{ section.settings.button_label }}</button>
+            </div>
+         </form>
+        <p class="caption">{{ section.settings.caption }}</p>
+        {% if form.posted_successfully? %}
+        <p id="popup-success-message" style="display: none;color: #FF8484;">Thanks for subscribing!</p>
+        {% endif %}
+        
+      </div>
+      {% if section.settings.popup_image %}
+        <div class="popup-right">
+          <img src="{{ section.settings.popup_image | img_url: 'master' }}" alt="Newsletter Image">
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <style>
+    #popup-newsletter {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 9999;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .popup-overlay {
+      position: absolute;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 1;
+    }
+
+    #popup-wrapper {
+      top: 5%;
+      padding: 28px;
+      position: relative;
+      display: flex;
+      width: 100%;
+      max-width: 55%;
+      z-index: 2;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+    }
+
+    .popup-left, .popup-right {
+      padding: 40px;
+    }
+
+    .popup-left {
+      width: 55%;
+      background: {{ section.settings.background_color }};
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+    }
+
+    .popup-left h2 {
+      margin-top: 60px;
+      color: #000;
+      font-family: "Poppins Light";
+      font-size: 38px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 54px;
+      letter-spacing: 1.5px;
+      text-transform: capitalize;
+    }
+
+    .popup-left p {
+      color: #000;
+      text-shadow: 0px 2px 5px rgba(255, 255, 255, 0.05);
+      font-family: "Poppins ExtraLight";
+      font-size: 18px;
+      font-style: normal;
+      font-weight: 275;
+      line-height: normal;
+      letter-spacing: 0.5px;
+    }
+
+    .popup-left form {
+      margin: 20px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .popup-left input[type="email"] {
+      padding: 12px;
+      border: none;
+      border-radius: 6px;
+      width: 100%;
+    }
+
+    .popup-left button {
+      color: #FF8484;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      background: var(--Gradient, linear-gradient(90deg, var(--color-supportive-seasonal-color-light-spring-warm-rose-pink, #F7A8A8) 0%, var(--color-supportive-seasonal-color-true-spring-coral-pink, #F76C6C) 25%, var(--color-supportive-seasonal-color-bright-spring-bright-peachy-pink, #FF8484) 40%, var(--color-supportive-seasonal-color-light-summer-soft-pink-rose, #E1A2A2) 55%, var(--color-supportive-seasonal-color-true-summer-cool-rose-pink, #CC7B7B) 85%, var(--color-supportive-seasonal-color-soft-summer-muted-mauve-pink, #C69CA3) 100%));
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .popup-left .caption {
+      color: #000;
+      text-shadow: 0px 2px 5px rgba(255, 255, 255, 0.05);
+      font-family: "Poppins ExtraLight";
+      font-size: 12px;
+      font-style: normal;
+      font-weight: 275;
+      line-height: 34px; /* 283.333% */
+      letter-spacing: 0.5px;
+    }
+
+    .popup-right {
+      width: 45%;
+      padding: 0;
+    }
+
+    .popup-right img {
+      width: 100%;
+      height: 100%;
+      border-radius: 15px;
+      object-fit: cover;
+    }
+
+    .popup-close {
+      position: absolute;
+      top: 0;
+      right: 10px;
+      background: none;
+      border: none;
+      font-size: 35px;
+      font-family: "Poppins Extralight";
+    }
+
+    .form-inline {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 6px;
+    }
+    
+    .email-icon {
+      display: flex;
+      align-items: center;
+      color: #ff69b4; /* pink or use 'currentColor' */
+    }
+    
+    .email-icon svg {
+      width: 25px;
+      height: 25px;
+    }
+    
+    .form-inline input[type="email"] {
+      flex: 1;
+      border: none;
+      border-bottom: none;
+      background: transparent;
+      padding: 8px 0px;
+      font-size: 16px;
+      font-family: "Poppins";
+      outline: none;
+    }
+    
+    .form-inline button {
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      white-space: nowrap;
+      font-size: 16px;
+      background: var(--Gradient, linear-gradient(90deg, var(--color-supportive-seasonal-color-light-spring-warm-rose-pink, #F7A8A8) 0%, var(--color-supportive-seasonal-color-true-spring-coral-pink, #F76C6C) 25%, var(--color-supportive-seasonal-color-bright-spring-bright-peachy-pink, #FF8484) 40%, var(--color-supportive-seasonal-color-light-summer-soft-pink-rose, #E1A2A2) 55%, var(--color-supportive-seasonal-color-true-summer-cool-rose-pink, #CC7B7B) 85%, var(--color-supportive-seasonal-color-soft-summer-muted-mauve-pink, #C69CA3) 100%));
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .form-inline input::placeholder {
+      color: #FF8484;
+      background: var(--Gradient, linear-gradient(90deg, var(--color-supportive-seasonal-color-light-spring-warm-rose-pink, #F7A8A8) 0%, var(--color-supportive-seasonal-color-true-spring-coral-pink, #F76C6C) 25%, var(--color-supportive-seasonal-color-bright-spring-bright-peachy-pink, #FF8484) 40%, var(--color-supportive-seasonal-color-light-summer-soft-pink-rose, #E1A2A2) 55%, var(--color-supportive-seasonal-color-true-summer-cool-rose-pink, #CC7B7B) 85%, var(--color-supportive-seasonal-color-soft-summer-muted-mauve-pink, #C69CA3) 100%));
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+
+    @media screen and (max-width: 768px) {
+      #popup-newsletter {
+        padding: 20px;
+      }
+      #popup-wrapper {
+        padding: 0;
+        flex-direction: column;
+        max-width: 100%;
+        width: 100%;
+      }
+      .popup-close {
+        top: 10px;
+        right: -5px !important;
+      }
+
+      .popup-left {
+        width: 100%;
+        padding: 30px;
+      }
+      .popup-left form {
+        margin: 0;
+      }
+      .popup-left h2 {
+        margin: 0;
+        margin-top: 20px;
+      }
+      .popup-left p {
+        line-height: 26px;
+      }
+      .popup-left .caption {
+        font-size: 8px;
+      }
+
+      .popup-right {
+        display: none;
+      }
+    }
+  </style>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      setTimeout(function () {
+        document.getElementById('popup-newsletter').style.display = 'flex';
+      }, {{ section.settings.popup_delay | times: 1000 }});
+
+      document.getElementById("popup-newsletter-form").addEventListener("submit", function (e) {
+        e.preventDefault();
+    
+        const form = e.target;
+        const formData = new FormData(form);
+    
+        fetch(form.action, {
+          method: "POST",
+          body: new URLSearchParams(formData)
+        })
+        .then(response => {
+          if (response.ok) {
+            form.style.display = "none";
+            document.getElementById("popup-success-message").style.display = "block";
+          } else {
+            return response.text().then(text => {
+              console.error("Error response:", text);
+              alert("Something went wrong. Please try again.");
+            });
+          }
+        });
+      });
+
+
+      // Check if we're returning from the newsletter form in the popup
+      const url = window.location.href;
+      
+      if (url.includes('#popup-wrapper')) {
+        // Check for Shopify form errors
+        const form = document.getElementById('popup-newsletter-form');
+        const hasErrors = form.querySelector('.form__message, .errors, .field--error');
+  
+        if (!hasErrors) {
+          // Hide form and show thank you message
+          form.style.display = 'none';
+          document.getElementById('popup-success-message').style.display = 'block';
+  
+          // Optionally open popup if closed (customize this based on your popup logic)
+          const popup = document.getElementById('#popup-wrapper'); // replace with your popup container ID
+          if (popup) popup.classList.add('active');
+          document.getElementById('popup-success-message').style.display = 'block';
+        }
+      }
+
+
+      // Prevent Scroll to Footer Newsletter
+      const footerForm = document.querySelector('footer form[action="/contact"]');
+      if (footerForm) {
+        footerForm.addEventListener('submit', function (e) {
+          if (window.location.href.includes('#popup-wrapper')) {
+            e.preventDefault(); // prevent footer from submitting again
+          }
+        });
+      }
+
+      //On Successful Form Submission, set a flag in localStorage
+      const popupForm = document.querySelector('#popup-wrapper form');
+
+      if (!popupForm) return;
+    
+      popupForm.addEventListener('submit', function () {
+        // Wait for form submission + success response
+        const checkInterval = setInterval(() => {
+          const successMessage = document.querySelector('#popup-wrapper .form__message--success');
+          if (successMessage) {
+            // ✅ Set localStorage flag
+            localStorage.setItem('popup_subscribed', 'true');
+    
+            // ✅ Hide the popup
+            document.getElementById('popup-wrapper').style.display = 'none';
+    
+            clearInterval(checkInterval);
+          }
+        }, 500);
+      });
+      
+    });
+  </script>
+{% endif %}

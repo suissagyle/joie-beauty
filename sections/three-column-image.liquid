@@ -1,0 +1,137 @@
+{% schema %}
+{
+  "name": "Three Column Image",
+  "settings": [
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "row1_col1",
+      "name": "Row 1 Col 1: Title",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Title", "default": "All natural, ingredients" },
+        { "type": "textarea", "id": "paragraph", "label": "Paragraph" , "default": "Get a professional grade colour consultation with a complete makeup guide designed for your skintone. "},
+        { "type": "text", "id": "button_label", "label": "Button Label", "default": "Buy now"  },
+        { "type": "url", "id": "button_link", "label": "Button Link" }
+      ]
+    },
+    {
+      "type": "row1_col2",
+      "name": "Row 1 Col 2: Image",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image" }
+      ]
+    },
+    {
+      "type": "row1_col3",
+      "name": "Row 1 Col 3: List",
+      "settings": [
+        { "type": "textarea", "id": "paragraph1", "label": "Paragraph 1" },
+        { "type": "textarea", "id": "paragraph2", "label": "Paragraph 2" },
+        { "type": "textarea", "id": "paragraph3", "label": "Paragraph 3" },
+        { "type": "textarea", "id": "paragraph4", "label": "Paragraph 4" },
+        { "type": "textarea", "id": "paragraph5", "label": "Paragraph 5" }
+      ]
+    }
+  ],
+  "presets": [
+    { "name": "Three Column Image", "blocks": [ { "type": "row1_col1" }, { "type": "row1_col2" }, { "type": "row1_col3" } ] }
+  ]
+}
+{% endschema %}
+
+<style>
+  .two-row-section {
+    flex-direction: column;
+    padding: 20px;
+  }
+  .column {
+    flex: 1;
+    min-height: 680px;
+    padding: 20px;
+    align-content: center;
+  }
+  .two-row-section li {
+    list-style: none;
+    position: relative;
+    padding-left:50px;
+    color: #000;
+    text-shadow: 0px 2px 5px rgba(255, 255, 255, 0.05);
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 275;
+    line-height: 26px; /* 162.5% */
+    letter-spacing: 0.75px;
+    border-bottom: 1px solid #00000021;
+    padding: 20px;
+  }
+  .two-row-section li:before {
+    width: 8px;
+    height: 8px;
+    content:"\f111"; 
+    font-family: FontAwesome;
+    position: absolute;
+    left: 0;
+    color: #F7A8A8;
+    font-size: 8px;
+  }
+  .show-image {
+    transition: all 0.7s ease-in-out;
+  }
+  @media(max-width: 1024px) {
+    .two-row-section.image .column {
+      min-height: 170px;
+      height: auto;
+      flex: auto;
+      align-content: baseline;
+    }
+    .two-row-section.image .column ul {
+      padding-left: 0;
+    }
+    .two-row-section.image .row1 {
+      display: flex;
+      flex-wrap: wrap;
+      flex-direction: row;
+      text-align: center;
+    }
+    .two-row-section.image .buy-button {
+      margin: 0 auto;
+    }
+    .two-row-section.image img {
+      max-width: 198px;
+    }
+  }
+</style>
+
+<div class="two-row-section image d-flex"  style="background-color: {{ section.settings.background_color }};">
+  <div class="section-container p-0">
+    <div class="d-flex w-100 m-auto w-80">
+      <div class="column w-33 d-flex flex-wrap align-items-center align-content-center">
+        <span class="row1 w-80">
+          <h2 class="m-0">{{ section.blocks[0].settings.title }}</h2>
+          <p>{{ section.blocks[0].settings.paragraph }}</p>
+          <span class="w-100 d-block">
+            <a href="{{ section.blocks[0].settings.button_link }}" class="buy-button">{{ section.blocks[0].settings.button_label }}</a>
+          </span>
+        </span>
+      </div>
+      <div class="column w-33 center">
+        <img src="{{ section.blocks[1].settings.image | img_url: 'master' }}" style="width:100%;" alt="img">
+      </div>
+      <div class="column w-33 p-0-mobile">
+        <ul>
+          <li>{{ section.blocks[2].settings.paragraph1 }}</li>
+          <li>{{ section.blocks[2].settings.paragraph2 }}</li>
+          <li>{{ section.blocks[2].settings.paragraph3 }}</li>
+          <li>{{ section.blocks[2].settings.paragraph4 }}</li>
+          <li>{{ section.blocks[2].settings.paragraph5 }}</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+

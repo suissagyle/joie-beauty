@@ -1,0 +1,264 @@
+{% schema %}
+{
+  "name": "Two Column Progress Bar",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "bg_image",
+      "label": "Background Image"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "94%"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Received accurate seasonal analysis results"
+    },
+    {
+      "type": "text",
+      "id": "progress_caption",
+      "label": "Progress Bar Caption",
+      "default": "Get a professional grade colour consultation with a complete makeup guide designed for your skintone. "
+    },
+    {
+      "type": "image_picker",
+      "id": "image_1",
+      "label": "First Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_2",
+      "label": "Second Image"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Two Column Progress Bar"
+    }
+  ]
+}
+{% endschema %}
+
+<style>
+.custom-progress-section {
+  display: flex;
+  position: relative;
+  background-color: {{ section.settings.bg_color }};
+  background-image: url({{ section.settings.bg_image | img_url: 'master' }});
+  background-size: 50%;
+  background-repeat: no-repeat;
+  background-position: right;
+  padding: 50px 0;
+}
+    
+.custom-progress-section .left-column {
+  padding: 50px;
+  position: relative;
+}
+.custom-progress-section .left-column h2 {
+  font-size: 150px;
+  font-style: normal;
+  font-family: "Poppins Extralight";
+  line-height: normal !important;
+  margin: 0;
+  text-transform: capitalize;
+  background: var(--Gradient, linear-gradient(90deg, var(--color-supportive-seasonal-color-light-spring-warm-rose-pink, #F7A8A8) 0%, var(--color-supportive-seasonal-color-true-spring-coral-pink, #F76C6C) 25%, var(--color-supportive-seasonal-color-bright-spring-bright-peachy-pink, #FF8484) 40%, var(--color-supportive-seasonal-color-light-summer-soft-pink-rose, #E1A2A2) 55%, var(--color-supportive-seasonal-color-true-summer-cool-rose-pink, #CC7B7B) 85%, var(--color-supportive-seasonal-color-soft-summer-muted-mauve-pink, #C69CA3) 100%));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+ .custom-progress-section .left-column .subheading {
+  font-size: 38px;
+  font-style: normal;
+  font-weight: 300;
+  line-height: 50px; /* 131.579% */
+  letter-spacing: 0.5px;
+  background: var(--Gradient, linear-gradient(90deg, var(--color-supportive-seasonal-color-light-spring-warm-rose-pink, #F7A8A8) 0%, var(--color-supportive-seasonal-color-true-spring-coral-pink, #F76C6C) 25%, var(--color-supportive-seasonal-color-bright-spring-bright-peachy-pink, #FF8484) 40%, var(--color-supportive-seasonal-color-light-summer-soft-pink-rose, #E1A2A2) 55%, var(--color-supportive-seasonal-color-true-summer-cool-rose-pink, #CC7B7B) 85%, var(--color-supportive-seasonal-color-soft-summer-muted-mauve-pink, #C69CA3) 100%));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.progressBar {
+  margin-bottom: 26px;
+  margin-bottom: 1.66em;
+}
+.progressBar h4 {
+  font-size: 16px;
+  text-transform: none;
+  margin-bottom: 7px;
+  margin-bottom: .33em;
+}
+.progress-caption {
+  color: #000;
+  width: 100%;
+  max-width: 500px;
+  text-shadow: 0px 2px 5px rgba(255, 255, 255, 0.05);
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 275;
+  line-height: 34px; /* 170% */
+  letter-spacing: 0.5px;
+}
+  
+.progressBarContainer {
+    width: 100%;
+    height: 4px;
+    background: #f8f8f8;
+    overflow: hidden;
+    position: relative;
+    stroke-width: 2px;
+    stroke: #FFF;
+    mix-blend-mode: darken;
+    filter: drop-shadow(0px 0px 8px #FFC1C1);
+}
+.progressBarValue {
+  height: 8px;
+  width: 5%;
+  display: block !important;
+  transition: all 0.5s;
+  background: linear-gradient(45deg, #F7A8A8, #F76C6C, #E1A2A2, #CC7B7B, #C69CA3);
+  position: absolute;
+  animation-name: expandBar;
+  animation-iteration-count: 1;
+  animation-timing-function: all;
+  animation-duration: 1s;
+}
+
+.custom-progress-section .left-column .progressBarValue.full-bar,
+.custom-progress-section .left-column:hover .progressBarValue {
+  width: 94%;
+}
+
+
+
+@keyframes expandBar {
+  0% {
+    left: 0;
+    width: 0;
+  }
+  50% {
+    left: 0;
+    width: 94%;
+  }
+}
+
+.progressBarValue.full-bar {
+  width: 94%;
+}
+.custom-progress-section .left-column:hover .progress-bar::after {
+  width: 100%;
+}
+.progress-caption {
+  margin-top: 10px;
+  font-size: 14px;
+  color: {{ section.settings.desc_color }};
+}
+.custom-progress-section .right-column2 {
+  position: relative;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px;
+}
+.custom-progress-section .right-column2 img {
+  width: 100%;
+  max-width: 400px;
+  max-height: 300px;
+  margin-bottom: 20px;
+  height: auto;
+  border-radius: 15px;
+}
+
+@media (max-width: 1920px) {
+  .progress-caption {
+    max-width: 430px;
+    font-size: 16px;
+  }
+}
+@media(max-width: 1024px){
+  .custom-progress-section .left-column {
+    padding: 0px 50px;
+    height: auto !important;
+  }
+  .custom-progress-section h2 {
+    font-size: 120px !important;
+    line-height: normal;
+  }
+  .custom-progress-section .left-column .subheading {
+    font-size: 22px;
+    line-height: 34px
+  }
+  .progress-caption {
+    font-size: 16px;
+  }
+}
+
+@media(max-width: 768px){
+  .custom-progress-section {
+    padding: 0;
+  }
+  .custom-progress-section .left-column {
+    padding: 20px 50px;
+}
+
+  
+</style>
+
+<div class="custom-progress-section" >
+  <div class="section-container medium p-0 d-flex">
+    <div class="left-column w-60">
+      <h2 class="no-font-change-mobile">{{ section.settings.title }}</h2>
+      <p class="subheading m-0 mb-4">{{ section.settings.description }}</p>
+      <div class="progressBar mt-4">
+        <div class="progressBarContainer">
+          <div class="progressBarValue"></div>
+        </div>
+      </div>
+      <p class="progress-caption">{{ section.settings.progress_caption }}</p>
+    </div>
+    <div class="right-column2 w-40">
+      {% if section.settings.image_1 %}
+        <img src="{{ section.settings.image_1 | img_url: 'large' }}" alt="First Image">
+      {% endif %}
+      {% if section.settings.image_2 %}
+        <img src="{{ section.settings.image_2 | img_url: 'large' }}" alt="Second Image">
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const bar = document.querySelector(".progressBarValue");
+    if (!bar) return;
+
+    const delay = {{ section.settings.autoplay_delay | default: 0.5 }} * 1000;
+
+    const observer = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          setTimeout(() => {
+            bar.classList.add("full-bar");
+          }, delay);
+          observer.unobserve(entry.target); // Trigger once
+        }
+      });
+    }, {
+      threshold: 0.5
+    });
+
+    observer.observe(bar);
+  });
+
+</script>

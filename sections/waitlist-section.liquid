@@ -1,0 +1,1008 @@
+{% schema %}
+{
+  "name": "Waitlist Section",
+  "settings": [
+    { "type": "image_picker", "id": "background_image", "label": "Upload Background Image" },
+    { "type": "image_picker", "id": "logo_image", "label": "Upload Logo" },
+    { "type": "range", "id": "logo_width", "label": "Logo Width (%)", "min": 10, "max": 100, "default": 50, "step": 5 },
+    { "type": "text", "id": "form_title", "label": "Form Title", "default": "Join Our Waitlist" },
+    { "type": "text", "id": "form_subheading", "label": "Form Subheading", "default": "Be the first to know!" },
+    { "type": "textarea", "id": "form_description", "label": "Form Description" },
+    { "type": "text", "id": "button_label", "label": "Button Label", "default": "Submit" },
+    { "type": "image_picker", "id": "color_image", "label": "Color Image (Revealed after submission)" },
+    { "type": "range", "id": "section_width", "label": "Section Width (%)", "min": 30, "max": 100, "default": 50, "step": 5 },
+    { "type": "range", "id": "section_height", "label": "Section Height (%)", "min": 50, "max": 100, "default": 75, "step": 5 }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Grayscale Image",
+      "settings": [
+        { "type": "image_picker", "id": "grayscale_image", "label": "Upload Grayscale Image" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Waitlist Section",
+      "category": "Custom" 
+    }
+  ]
+}
+{% endschema %}
+
+<div class="waitlist-section" style="width: {{ section.settings.section_width }}%; height: {{ section.settings.section_height }}vh; background-image: url('{{ section.settings.background_image | img_url: '1920x1080' }}'); background-size: cover; background-position: center;">
+  <div class="overlay"></div>
+  <div class="form-container">
+    
+    {% form 'customer', id: 'waitlist-form', class: 'waitlist-form' %}
+       {% if section.settings.logo_image %}
+        <div class="logo" style="background-image:url('{{ section.settings.logo_image | img_url: '300x' }}'); width: {{ section.settings.logo_width }}%;"></div>
+       {% endif %}
+       
+      <h2>{{ section.settings.form_title }}</h2>
+      
+      <span>
+        <h1 class="mobile">Find Your <br /> <span>"Your Color"</span></h1>
+        <h3>{{ section.settings.form_subheading }}</h3>
+        <p>{{ section.settings.form_description }}</p>
+      </span>
+      <button class="desktop-btn mt-4">Join JOIE</button>
+      <div class="field-form d-flex hidden">
+        <span class="d-flex mt-2">
+          <span class="email-icon"></span>
+          <input type="email" name="contact[email]" id="waitlist-email" placeholder="Email" required>
+          <!-- Hidden input for country detection -->
+          <input type="hidden" name="contact[note]" id="country-data" value="">
+         </span>
+          <p id="thank-you-message">Thank you! You're on the waitlist.</p>
+          <button type="submit" class="submit-btn mt-2">Submit</button>
+      </div>
+      
+    {% endform %}
+  
+    <form class="waitlist-form2 mobile d-flex">
+     {% if section.settings.logo_image %}
+        <div class="logo mobile"></div>
+      {% endif %}
+      <div class="center-button">
+        <h2>{{ section.settings.form_title }}</h2>
+        <button class="mobile-btn mt-4">Join JOIE</button>
+      </div>
+      <span class="w-100">
+        <h3>{{ section.settings.form_subheading }}</h3>
+        <p>{{ section.settings.form_description }}</p>
+      </span>
+    </form>
+  </div>
+  
+  <div class="wrapper">
+    <div class="swiper-container">
+		<div class="swiper-wrapper">
+          {% for block in section.blocks %}
+            {% if block.settings.grayscale_image %}
+			<div class="swiper-slide">
+            <img src="{{ block.settings.grayscale_image | img_url: '500x' }}"  class="grayscale" alt="img"/>
+            </div>
+			{% endif %}
+          {% endfor %}
+          {% for block in section.blocks %}
+            {% if block.settings.grayscale_image %}
+			<div class="swiper-slide">
+              <img src="{{ block.settings.grayscale_image | img_url: '500x' }}"  class="grayscale" alt="img"/>
+            </div>
+			{% endif %}
+          {% endfor %}
+		</div>
+	</div>
+    {% if section.settings.color_image %}
+        <img src="{{ section.settings.color_image | img_url: '500x' }}" id="color-image" class="hidden" alt="img">
+    {% endif %}
+  </div>
+
+</div>
+
+<style>
+/* ======= General Styling ======= */
+.waitlist-section .overlay {
+  display: none;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  z-index: 60;
+  top: 0;
+  left: 0;
+  opacity: 0.3;
+  background: #000;
+}
+
+.waitlist-section .waitlist-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin: auto;
+  position: relative;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* ======= Form & Logo Section ======= */
+.waitlist-section { 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  overflow: hidden;
+}
+
+#thank-you-message {
+  display: none; 
+  
+  width: 100%;
+  font-size: 1.3rem;
+}
+
+#fixed-newsletter-form {
+  display:none;
+}
+
+.waitlist-form {
+  height: 100%;
+  max-width: 468px;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: space-around;
+}
+
+.waitlist-form h2 { 
+  font-weight: 275;
+  font-family: "Poppins";
+  font-size: 64px;
+  color: #505050;
+  line-height: 70px;
+  letter-spacing: 0.31px;
+  text-transform: capitalize;
+  width: 100%;
+  width: 100%;
+}
+
+.waitlist-section  h2 span {
+  font-size: 69px;
+  color: #505050;
+}
+
+.waitlist-section h2 span, .waitlist-section  h1.mobile span {
+  display: block;
+  font-family: "Cormorant Upright", serif;
+  font-weight: 275;
+  letter-spacing: 0.2px;
+  text-transform: capitalize;
+}
+
+.waitlist-form h1.mobile { 
+  display: none;
+}
+
+.waitlist-form h3 { 
+  text-transform: uppercase;  
+  padding: 0; 
+  margin: 10px 0;
+}
+
+.waitlist-section p { 
+  font-size: 22px; 
+  padding: 0; 
+  margin: 0; 
+  line-height: 35.4px;
+  letter-spacing: 0px;
+}
+.waitlist-section .form-container { 
+  width: 75%; 
+  padding: 70px; 
+}
+
+.waitlist-form img { 
+  max-width: 192px; 
+}
+
+.waitlist-form2 img { 
+  max-width: 192px; 
+}
+
+.waitlist-section .field-form {
+  width: 100%;
+  clear: both;
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 370px;
+  height: 40px;
+  border-bottom: 1px solid #9fa6b3;
+}
+
+.waitlist-section .field-form .d-flex {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.waitlist-form input[type=email] {
+  color: #ffffff; 
+  padding: 0 10px;
+}
+
+.waitlist-form2.mobile {
+  display: none;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  overflow: hidden;
+  height: 100%;
+}
+
+
+.waitlist-form2.mobile .field-form {
+  border-bottom: 0;
+}
+
+.waitlist-form input[type="email"] {
+  height: 30px;
+  -webkit-appearance: none;
+  appearance: none;
+  border: 0;
+  background: transparent;
+  border-radius: 0;
+  color: #222;
+  font-size: 15px;
+  font-weight: 300;
+  font-family: "Cormorant Upright", sans-serif;
+  outline: none;
+  transition-property: border, padding;
+  transition-duration: .5s;
+  transition-timing-function: ease;
+  width: 100%;
+}
+
+.waitlist-form input[type="email"] + label {
+  background: #9fa6b3;
+  color: #fff;
+  font-weight: 300;
+  left: 0;
+  padding: 5px 20px 5px 20px;
+  position: absolute;
+  top: 33px;
+  transition-property: top, background;
+  transition-duration: 500ms;
+  transition-timing-function: ease;
+}
+
+.waitlist-section .desktop-btn {
+    color: #505050;
+    width: 120px;
+    padding: 20px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 300;
+    border-radius: 30px;
+    border: 0.3px solid #505050;
+    box-shadow: 0px 2px 6px 0px #FF878759;
+}
+
+.waitlist-section .mobile-btn {
+    color: #fff;
+    width: 120px;
+    padding: 20px;
+    margin-top: 70px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 300;
+    border-radius: 30px;
+    border: none;
+    backdrop-filter: blur(4px);
+    background: radial-gradient(109.22% 407.23% at 4.85% -46.97%, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0.65) 100%);
+    box-shadow: 0px 2px 6px 0px #FF878759;;
+}
+
+.waitlist-section .logo {
+    height: 30px;
+    display: block !important;
+    background-repeat: no-repeat;
+    background-size: 190px;
+}
+
+.waitlist-section .logo.mobile {
+  width: 100%;
+  background-image:url('https://cdn.shopify.com/s/files/1/0690/7592/7092/files/JOIE_-_LOGO_-white.png?v=1742380446');
+}
+
+.waitlist-section .email-icon {
+  width: 35px;
+  height: 30px;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  background-image:url("https://cdn.shopify.com/s/files/1/0690/7592/7092/files/drafts.svg?v=1741615929");
+}
+
+.waitlist-section .submit-btn {
+  width: 133px;
+  height: 43px;
+  font-weight: 300;
+  font-family: "Poppins Light";
+  border-radius: 30px;
+  border: .3px solid #505050;
+  background-color: transparent;
+  padding: 10px 20px;
+}
+
+.waitlist-section .submit-btn:hover {
+  cursor: pointer;
+}
+
+.waitlist-section .wrapper {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.waitlist-section .wrapper.mobile {
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  transition: all 0.5s;
+}
+
+.waitlist-section .carousel {
+  position: relative;
+  width: 100%;
+  max-width: 600px;
+  display: inherit;
+  text-align: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+img#color-image {
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    max-width: 585px;
+    object-fit: cover;
+    position: absolute;
+    margin: 0 auto;
+}
+
+.waitlist-section .hidden {
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(0.8); /* Start smaller */
+}
+
+.fade-in {
+  animation: fade-in 1s;
+}
+
+.fade-out {
+  animation: fade-out 1s;
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+    transform: translateY(30px) scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0px) scale(1);
+  }
+}
+
+@keyframes fade-out {
+  0% {
+    transform: translateY(0px) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(30px) scale(0.9);
+  }
+}
+
+.carousel__item {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  width: 100%;
+  opacity: 0;
+  filter: drop-shadow(0 2px 2px #555);
+  will-change: transform, opacity;
+  -webkit-animation: carousel-animate-vertical 18s linear infinite;
+          animation: carousel-animate-vertical 18s linear infinite;
+}
+
+.carousel__item:nth-child(1) {
+  -webkit-animation-delay: calc(3s * -1);
+          animation-delay: calc(3s * -1);
+}
+
+.carousel__item:nth-child(2) {
+  -webkit-animation-delay: calc(3s * 0);
+          animation-delay: calc(3s * 0);
+}
+
+.carousel__item:nth-child(3) {
+  -webkit-animation-delay: calc(3s * 1);
+          animation-delay: calc(3s * 1);
+}
+
+.carousel__item:nth-child(4) {
+  -webkit-animation-delay: calc(3s * 2);
+          animation-delay: calc(3s * 2);
+}
+
+.carousel__item:nth-child(5) {
+  -webkit-animation-delay: calc(3s * 3);
+          animation-delay: calc(3s * 3);
+}
+
+.carousel__item:last-child {
+  -webkit-animation-delay: calc(-3s * 2);
+          animation-delay: calc(-3s * 2);
+}
+
+.carousel__item-body {
+  width: 100%;
+  height: 75vh;
+  border-radius: 8px;
+}
+
+.carousel__item img.grayscale {
+    width: 490px;
+    height: 80vh;
+    object-fit: cover;
+    object-position: center;
+}
+
+.waitlist-section .title {
+  text-transform: uppercase;
+  font-size: 20px;
+  margin-top: 10px;
+}
+
+@-webkit-keyframes carousel-animate-vertical {
+  0% {
+    transform: translateY(100%) scale(0.5);
+    opacity: 0;
+    visibility: hidden;
+  }
+  3%, 11.1111111111% {
+    transform: translateY(100%) scale(0.7);
+    opacity: 0.4;
+    visibility: visible;
+  }
+  14.1111111111%, 22.2222222222% {
+    transform: translateY(0) scale(1.2);
+    opacity: 1;
+    visibility: visible;
+  }
+  25.2222222222%, 33.3333333333% {
+    transform: translateY(-100%) scale(0.7);
+    opacity: 0.4;
+    visibility: visible;
+  }
+  36.3333333333% {
+    transform: translateY(-100%) scale(0.5);
+    opacity: 0;
+    visibility: visible;
+  }
+  100% {
+    transform: translateY(-100%) scale(0.5);
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+@keyframes carousel-animate-vertical {
+  0% {
+    transform: translateY(100%) scale(0.5);
+    opacity: 0;
+    visibility: hidden;
+  }
+  3%, 16.6666666667% {
+    transform: translateY(100%) scale(0.7);
+    opacity: 0.4;
+    visibility: visible;
+  }
+  19.6666666667%, 33.3333333333% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+    visibility: visible;
+  }
+  36.3333333333%, 50% {
+    transform: translateY(-100%) scale(0.7);
+    opacity: 0.4;
+    visibility: visible;
+  }
+  53% {
+    transform: translateY(-100%) scale(0.5);
+    opacity: 0;
+    visibility: visible;
+  }
+  100% {
+    transform: translateY(-100%) scale(0.5);
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+
+
+/* SWIPER */
+
+.waitlist-section .swiper-container {
+	width: 585px;
+    height: 100%;
+    padding: 0;
+    margin-left: auto;
+    margin-right: auto;
+}
+.waitlist-section .swiper-slide {
+	text-align: center;
+/* 	transform: scale(0.8); */
+	/* Center slide text vertically */
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-box-pack: center;
+	-ms-flex-pack: center;
+	-webkit-justify-content: center;
+	justify-content: center;
+	-webkit-box-align: center;
+	-ms-flex-align: center;
+	-webkit-align-items: center;
+	align-items: center;
+	transition: 0.3s all;
+	border-radius: 10px;
+    background-size: cover;
+    background-position: center center;
+}
+
+.waitlist-section .swiper-slide img {
+    width: 100%;
+    height: 90%;
+    object-fit: cover;
+}
+
+.waitlist-section .swiper-slide:not(.swiper-slide-prev):not(.swiper-slide-active):not(.swiper-slide-next) {
+	opacity: 0;
+}
+
+.waitlist-section .swiper-slide-prev, 
+.waitlist-section .swiper-slide-next {
+    filter: blur(2px);
+}
+
+.waitlist-section .swiper-slide-active {
+	transition: 0.3s all;
+	opacity: 1;
+    transform: scale(1.1);
+}
+
+
+
+
+
+@media(max-width: 1024px) {
+  ::placeholder {
+    color: white;
+  }
+  .waitlist-section h2 { 
+    font-size: 30px; 
+    width: 100%; 
+  }
+
+  .waitlist-form h1.mobile { 
+    display: block;
+    margin-top: 300px;
+  }
+  
+  .waitlist-section h3 { 
+    font-size: 22px; 
+    width: 100%; 
+  }
+
+  #color-image {
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+  }
+
+  .waitlist-section .field-form {
+    margin-bottom: -150px;
+  }
+  
+  .waitlist-section p { 
+    font-size: 22px; 
+    width: 100%;
+  }
+  
+  .waitlist-form {
+    display: none;
+    max-width: 100%;
+  }
+
+  .waitlist-form2.mobile {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: normal;
+    justify-content: center;
+    height: 100%;
+  }
+
+  .waitlist-section .center-button {
+    height: 45vh;
+  }
+  
+  .waitlist-section {
+    flex-wrap: wrap;
+    align-items: baseline;
+    background-image: url("https://cdn.shopify.com/s/files/1/0690/7592/7092/files/waitlist_02-01_-_mobile.png?v=1741649058");
+  }
+
+  .waitlist-section .form-container, .wrapper {
+    width: 100%;
+  }
+
+  .waitlist-section .form-container {
+    z-index: 100;
+    height: 100%;
+    padding: 0px 50px;
+    text-align: center;
+  }
+
+  .waitlist-section .wrapper {
+    z-index: 99;
+    left: 0px;
+    top: 0;
+    position: absolute;
+    height: 100vh;
+    width: 100%;
+    display: flex;
+  }
+
+  .waitlist-section .carousel {
+    max-width: 85%;
+  }
+
+  .waitlist-section .carousel__item img.grayscale {
+    width: 85vw;
+    height: 55vh;
+  }
+
+  img#color-image {
+    max-width: 100% !important;
+  }
+  .waitlist-section h2 span {
+    color: #fff;
+  }
+  .waitlist-form input[type=email] {
+    color: #fff;
+  }
+
+  .waitlist-section .swiper-slide img {
+    height: 100%;
+  }
+  
+}
+
+@media(max-width: 768px) {
+  .waitlist-section h2 span, .waitlist-section h1.mobile span {
+    font-size: 33.6px;
+    line-height: 36px;
+  }
+  .waitlist-section .logo {
+    background-size: 150px;
+    background-position: center;
+  }
+
+  .waitlist-form input[type=email] {
+    height: 35px;
+    font-size: 22px;
+  }
+   
+  .waitlist-form2.mobile {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 50px 0;
+    align-content: flex-start;
+    justify-content: center;
+    height: 100%;
+  }
+  
+  .waitlist-section .swiper-container {
+    width: 60%;
+    max-width: 585px;
+    height: 100%;
+    margin-top: -20px;
+    overflow: visible;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .waitlist-section .email-icon {
+    background-size: cover;
+    background-image:url("https://cdn.shopify.com/s/files/1/0690/7592/7092/files/drafts-white.png?v=1742379676");
+  }
+  
+  .waitlist-section .logo {
+    display: none;
+    width: 50%;
+    height: 30px;
+    display: block !important;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-image:url('https://cdn.shopify.com/s/files/1/0690/7592/7092/files/JOIE_-_LOGO_-white.png?v=1742380446') !important;
+  }
+
+  .waitlist-section .form-container.colored .logo {
+    margin-top: 30px;
+  }
+
+  .waitlist-section .form-container.colored h3 {
+    margin-top: 15% !important;
+  }
+  .waitlist-section .logo.mobile {
+    margin-top: 30px;
+    display: block;
+  }
+  
+  .waitlist-section .overlay {
+    display: block;
+  }
+  
+  .carousel__item img.grayscale {
+    height: 45vh;
+  }
+
+  .waitlist-form {
+    color: #fff;
+    height: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: flex-start;
+  }
+
+  .waitlist-section .field-form {
+    border-bottom: 1px solid #ffffff;
+  }
+  .waitlist-form img, .waitlist-form2 img {
+    margin: 0 auto;
+    height: fit-content;
+  }
+  .waitlist-section h1, .waitlist-section h2 {
+    color: #fff;
+  }
+
+  .waitlist-section h3 {
+    margin-top: 35% !important;
+  }
+  .waitlist-section h3, .waitlist-section p {
+    font-size: 22px;
+    line-height: normal;
+    padding: 0;
+    color: #fff;
+    margin: 0;
+  }
+  .waitlist-section .submit-btn {
+    width: 133px;
+    color: #fff;
+    margin: 30px auto 0;
+    font-weight: 275;
+    font-family: "Poppins ExtraLight", sans-serif;
+    border: 1px solid #ffffff;
+    background-color: transparent;
+    padding: 10px 20px;
+  }
+
+  .waitlist-section .swiper-slide {
+    transition: all 1s;
+  }
+
+  .waitlist-section .swiper-slide-active  {
+    transform: scale(1.2);
+    min-height: 320px;
+    margin-top: 0;
+    margin-bottom: 20px !important;
+  }
+
+  .waitlist-section .swiper-slide-prev, .swiper-slide-next  {
+    transform: scale(0.9);
+  }
+  .waitlist-section .center-button {
+    margin-top: 30%;
+  }
+  .waitlist-form h1.mobile {
+      margin-top: 80%;
+  }
+}
+
+@media(max-width: 480px) {
+  .waitlist-section .form-container {
+    padding: 0 40px;
+  }
+  
+  .waitlist-form2.mobile {
+    padding: 0px 0 80px;
+  }
+   .waitlist-section h3, .waitlist-section p {
+    font-size: 16px;
+   }
+  
+  .waitlist-section .submit-btn {
+    font-size: 16px;
+  }
+
+  .waitlist-form input[type="email"] {
+    font-size: 16px;
+  }
+
+  .waitlist-section .field-form {
+    margin-bottom: 20px;
+  }
+
+  .waitlist-section .swiper-container {
+    margin-top: -60px;
+  }
+
+  .waitlist-form2.mobile .w-100 {
+    margin-top: -30px;
+  }
+
+  .waitlist-section .swiper-slide-active  {
+    min-height: 280px;
+  }
+  #thank-you-message {
+    margin-bottom: 10px;
+    
+  }
+}
+</style>
+<script>
+var swiper = new Swiper(".swiper-container", {
+  effect: 'coverflow',
+  direction: 'vertical',
+  loop: true,
+  speed: 1500,
+  autoplay: true,
+  grabCursor: true,
+  centeredSlides: true,
+  centeredSlidesBounds: true, 
+  slidesPerView: 1,
+   spaceBetween: -70,
+  coverflowEffect: {
+    rotate: 0,
+    stretch: 0,
+    depth: 300,
+    modifier: 1,
+    initialSlide: 2,
+    slideShadows: true
+  },
+  freeMode:false,
+  freeModeSticky:true,
+  breakpoints: {
+    2000: {
+      effect: 'coverflow'
+    },
+    1024: {
+      slidesPerView: 3,
+      spaceBetween: -20,
+      effect: 'cards'
+    }
+  }
+});
+
+
+document.getElementById('waitlist-form').addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent default Shopify behavior
+
+    let emailInput = document.getElementById('waitlist-email').value.trim();
+    if (emailInput === "") {
+      alert("Please enter a valid email address.");
+      return;
+    }
+
+    // Fetch user’s country before submitting
+    fetch('https://ipapi.co/json/')
+      .then(response => response.json())
+      .then(data => {
+        document.getElementById('country-data').value = "Country: " + data.country_name;
+
+        // Submit the form after setting country data
+        document.getElementById('waitlist-form').submit();
+      })
+      .catch(error => {
+        console.error("Geolocation fetch error:", error);
+        document.getElementById('waitlist-form').submit(); // Submit even if country detection fails
+      });
+
+    // Show thank-you message after 1 second
+    setTimeout(() => {
+      document.getElementById('thank-you-message').style.display = 'block';
+      
+      document.querySelector('.swiper-container').classList.add('fade-out');
+      document.querySelector('.wrapper').classList.add('mobile');
+
+    const colorImage = document.getElementById('color-image');
+    if (colorImage) {
+      colorImage.classList.remove('hidden');
+      colorImage.classList.add('fade-in');
+      }
+    }, 1000);
+});
+
+
+document.addEventListener("DOMContentLoaded", function () {
+  const submitBtn = document.querySelector(".submit-btn");
+  const colorImage = document.getElementById("color-image");
+  const carousel = document.querySelector(".carousel");
+  const mobileBtn = document.querySelector(".mobile-btn");
+  const desktopForm = document.querySelector(".waitlist-form");
+  const mobileForm = document.querySelector(".waitlist-form2");
+
+  // Mobile button click event
+  if (mobileBtn) {
+    mobileBtn.addEventListener("click", function (e) {
+      e.preventDefault();
+      mobileForm.style.display = "none";
+      desktopForm.style.display = "flex";
+    });
+  }
+});
+
+//jQuery code
+jQuery(document).ready(function($) {
+  $('#submit-waitlist').click(function(e) {
+    e.preventDefault();
+    
+    // Stop the carousel scrolling animation
+    $('.carousel__item').css({
+      'animation': 'none',
+      '-webkit-animation': 'none'
+    });
+
+    setTimeout(function() {
+      $('.swiper-container').addClass('fade-out');
+      $('.wrapper').addClass('mobile');
+      $('#color-image').removeClass('hidden').addClass('fade-in');
+    }, 500);
+
+    
+  });
+
+   $('.mobile-btn').click(function(e) {
+      e.preventDefault();
+      $('.form-container').addClass('colored');
+      $('.waitlist-form h2').addClass('hidden');
+      $('.waitlist-form2.mobile').addClass('fade-in');
+      $('.swiper-container').addClass('fade-out');
+      $('.wrapper').addClass('mobile');
+      $('.field-form').removeClass('hidden');
+      $('.desktop-btn').addClass('hidden');
+      $('#color-image').removeClass('hidden').addClass('fade-in');
+   });
+
+   $('.desktop-btn').click(function(e) {
+      e.preventDefault();
+      $(this).addClass('hidden');
+      $('.field-form').removeClass('hidden');
+     
+      setTimeout(function() {
+        $('.swiper-container').addClass('fade-out');
+        $('#color-image').removeClass('hidden').addClass('fade-in');
+      }, 500);
+   });
+
+});
+</script>
+

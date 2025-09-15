@@ -1,0 +1,68 @@
+{% schema %}
+{
+  "name": "2 Images Flex Section",
+  "settings": [
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "row1_col1",
+      "name": "Row 1 Col 1: Image",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image" }
+      ]
+    },
+    {
+      "type": "row1_col2",
+      "name": "Row 1 Col 2: Image",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image" }
+      ]
+    }
+  ],
+  "presets": [
+    { "name": "2 Images Flex Section", "blocks": [ { "type": "row1_col1" }, { "type": "row1_col2" } ] }
+  ]
+}
+{% endschema %}
+
+<style>
+  .column {
+    flex: 1;
+    min-height: 680px;
+    padding: 20px;
+  }
+  .two-flex-image img {
+    border-radius: 20px;
+    width: 100%;
+    max-height: 359px;
+    object-position: center;
+    object-fit: cover;
+  }
+  
+  @media(max-width: 1024px) {
+    .two-flex-image img {
+      margin-bottom: 10px;
+    }
+  
+  }
+</style>
+
+<div class="two-flex-image p-15"  style="background-color: {{ section.settings.background_color }};">
+  <div class="section-container p-0">
+    <div class="d-flex w-100">
+      <div class="w-50 center p-15">
+        <img src="{{ section.blocks[0].settings.image | img_url: 'large' }}" alt="image 1" /> 
+      </div>
+      <div class="w-50 center p-15">
+        <img src="{{ section.blocks[1].settings.image | img_url: 'large' }}" alt="Image 2"/> 
+      </div>
+      </div>
+    </div>
+</div>
+</div>
+

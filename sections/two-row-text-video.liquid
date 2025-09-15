@@ -1,0 +1,346 @@
+{% schema %}
+{
+  "name": "Two Row Video Section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "section_name",
+      "label": "Secion Name"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Global Color Scheme"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background Image"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "row1_col1",
+      "name": "Row 1 Col 1: Title",
+      "settings": [
+        { "type": "text", "id": "caption", "label": "Caption" },
+        { "type": "text", "id": "title", "label": "Title" },
+        { "type": "textarea", "id": "paragraph", "label": "Paragraph" },
+        { "type": "text", "id": "button_label", "label": "Button Label" },
+        { "type": "url", "id": "button_link", "label": "Button Link" },
+        { "type": "text", "id": "text_link", "label": "Text Link" },
+        { "type": "url", "id": "text_link_url", "label": "Text Link URL" }
+      ]
+    },
+    {
+      "type": "row1_col2",
+      "name": "Row 1 Col 2: Video",
+      "settings": [
+        { "type": "text", "id": "video_url", "label": "Video URL (Video Upload)"},
+        { "type": "image_picker", "id": "cover_video", "label": "Cover Image"},
+        { "type": "text", "id": "video_caption", "label": "Video Caption" }
+      ]
+    },
+    {
+      "type": "row2_col1",
+      "name": "Row 2 Col 1: Card",
+      "settings": [
+        { "type": "image_picker", "id": "animated_image", "label": "Animated Image" },
+        { "type": "image_picker", "id": "cover_image", "label": "Cover Image" }
+      ]
+    },
+    {
+      "type": "row2_col2",
+      "name": "Row 2 Col 2: List",
+      "settings": [
+        { "type": "textarea", "id": "paragraph1", "label": "Paragraph 1" },
+        { "type": "textarea", "id": "paragraph2", "label": "Paragraph 2" },
+        { "type": "textarea", "id": "paragraph3", "label": "Paragraph 3" },
+        { "type": "textarea", "id": "paragraph4", "label": "Paragraph 4" },
+        { "type": "textarea", "id": "paragraph5", "label": "Paragraph 5" }
+      ]
+    }
+  ],
+  "presets": [
+    { "name": "Two Row Video Section", "blocks": [ { "type": "row1_col1" }, { "type": "row1_col2" }, { "type": "row2_col1" }, { "type": "row2_col2" } ] }
+  ]
+}
+{% endschema %}
+
+<style>
+  .two-row-section {
+    flex-direction: column;
+    padding: 20px;
+    {% if section.settings.background_image %}
+       background-image: url('{{ section.settings.background_image | img_url: 'large' }}');
+    {% endif %}
+  }
+  .column {
+    flex: 1;
+    min-height: 680px;
+    padding: 20px;
+  }
+  .two-row-section .column ul {
+      padding-left: 0;
+   }
+  .two-row-section li {
+    list-style: none;
+    position: relative;
+    padding-left:50px;
+    color: #000;
+    text-shadow: 0px 2px 5px rgba(255, 255, 255, 0.05);
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 275;
+    line-height: 26px; /* 162.5% */
+    letter-spacing: 0.75px;
+    border-bottom: 1px solid #00000021;
+    padding: 20px;
+  }
+  .two-row-section li:before {
+    width: 8px;
+    height: 8px;
+    content:"\f111"; 
+    font-family: FontAwesome;
+    position: absolute;
+    left: 0;
+    color: #F7A8A8;
+    font-size: 8px;
+  }
+  .animated-image-container {
+    position: relative;
+    width: 290px;
+    margin: 120px auto;
+  }
+  .show-image {
+    transition: all 0.7s ease-in-out;
+  }
+  .cover-image {
+    position: absolute;
+    bottom: 65px;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    transition: all 0.7s ease-in-out;
+  }
+  .animated-image-container:hover .show-image{
+    transform: scale(0.9);
+  }
+  
+  .animated-image-container:hover .cover-image {
+    transform: translateY(-80%);
+    opacity: 0;
+  }
+  
+  .video-teaser-container {
+    width: 100%;
+    height: 680px;
+    margin: auto;
+    flex-wrap: wrap;
+    position: relative;
+    overflow: hidden;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .video-cover {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .video-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 12px;
+  }
+  
+  .video-play-button {
+    top: 45%;
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    background-color: rgba(0, 0, 0, 0.6);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 11;
+  }
+  
+  .video-play-button svg {
+    width: 30px;
+    height: 30px;
+    fill: white;
+  }
+  
+  .video-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .video-container iframe {
+    width: 100%;
+    height: 100%;
+    display: none;
+    border: none;
+    object-fit: cover; /* Ensures the video fills the container */
+  }
+  .two-row-section .caption li {
+    border-bottom: 0;
+    padding: 0 15px;
+  }
+
+  .two-row-section .caption li::before {
+    color: #000;
+    width: 3px;
+    height: 3px;
+    font-size: 7px;
+    padding: 0;
+  }
+
+ .videoWrapper {
+    height:600px;
+    width:600px;
+    position:relative;
+    overflow:hidden;
+  }
+  
+  .videoWrapper iframe {
+  	height:100%;
+  	width:100%;
+  	position:absolute;
+  	top:0;
+  	bottom:0;
+  }
+
+  @media(max-width: 1920px) {
+    .two-row-section li {
+      font-size: 16px !important;
+    }
+  }
+
+  @media(max-width: 1024px) {
+    .two-row-section .column {
+      min-height: auto;
+      padding-bottom: 30px;
+      align-content: baseline;
+    }
+    .no-block-mobile {
+      justify-content: left;
+    }
+    .video-teaser-container {
+      height: 500px;
+    }
+  }
+</style>
+
+
+{% assign id = section.id %}
+
+<div id="{{ section.settings.section_name }}" class="two-row-section d-flex color-{{ section.settings.color_scheme }}"  style="background-color: {{ section.settings.color_scheme }};">
+  <div class="section-container medium p-20 d-flex">
+    <div class="column w-50 d-flex flex-wrap align-items-center align-content-center">
+      <span class="w-100">
+        <ul class="caption m-0 mb-4"><li>{{ section.blocks[0].settings.caption }}</li></ul>
+        <h2 class="m-0">{{ section.blocks[0].settings.title }}</h2>
+        <p>{{ section.blocks[0].settings.paragraph }}</p>
+        <span class="w-100 d-flex no-block-mobile justify-left align-items-center">
+          <a href="{{ section.blocks[0].settings.button_link }}" class="buy-button">{{ section.blocks[0].settings.button_label }}</a>
+          <a href="{{ section.blocks[0].settings.text_link_url }}" class="ms-2">{{ section.blocks[0].settings.text_link }}</a>
+        </span>
+      </span>
+    </div>
+    <div class="column w-50 video-container-wrap">
+      <div class="video-teaser-container" id="video-teaser-{{ id }}">
+        <!-- Video Cover -->
+        <div class="video-cover" id="video-cover-{{ id }}">
+          {% if section.blocks[1].settings.cover_video %}
+            <img src="{{ section.blocks[1].settings.cover_video | img_url: '400x' }}" alt="Video Cover" />
+          {% endif %}
+          <div class="video-play-button">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path d="M8 5v14l11-7z"/>
+            </svg>
+          </div>
+        </div>
+    
+        <!-- Video Container -->
+        <div class="video-container" id="video-container-{{ id }}">
+          {% assign video_url = section.blocks[1].settings.video_url %}
+    
+          <!-- Uploaded Video -->
+          <video id="uploaded-video-{{ id }}" controls playsinline webkit-playsinline style="width: 100%; height: 100%; border-radius: 12px; object-fit: cover; display: none;">
+            <source src="{{ section.blocks[1].settings.video_url }}" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="section-container small d-flex">
+    {% if section.blocks[2] %}
+    <div class="column w-50">
+      <div class="animated-image-container">
+        <img src="{{ section.blocks[2].settings.animated_image | img_url: 'large' }}" alt="Animated Image">
+        <img class="cover-image" src="{{ section.blocks[2].settings.cover_image | img_url: 'large' }}" alt="Cover Image">
+      </div>
+    </div>
+    {% endif %}
+    {% if section.blocks[3] %}
+    <div class="column w-50 align-content-center">
+      <ul>
+        <li>{{ section.blocks[3].settings.paragraph1 }}</li>
+        <li>{{ section.blocks[3].settings.paragraph2 }}</li>
+        <li>{{ section.blocks[3].settings.paragraph3 }}</li>
+        <li>{{ section.blocks[3].settings.paragraph4 }}</li>
+        <li>{{ section.blocks[3].settings.paragraph5 }}</li>
+      </ul>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+<script>
+// JavaScript to handle video play on cover click
+document.addEventListener("DOMContentLoaded", function () {
+  var id = "{{ id }}";
+  const cover = document.getElementById('video-cover-' + id);
+  const videoContainer = document.getElementById('video-container-' + id);
+  const uploadedVideo = document.getElementById('uploaded-video-' + id);
+  const iframe = document.getElementById('iframe-video-' + id);
+
+  // Ensure the video cover exists before adding event listener
+  if (cover) {
+    cover.addEventListener('click', function () {
+      cover.style.display = 'none'; // Hide the cover on click
+
+      if (uploadedVideo) {
+        uploadedVideo.style.display = 'block'; // Show uploaded video
+        uploadedVideo.play(); // Play uploaded video
+      }
+
+      if (iframe) {
+        iframe.style.display = 'block'; // Show iframe for embedded video
+        let src = iframe.src.replace("autoplay=0", "autoplay=1"); // Make sure autoplay is enabled
+        iframe.src = ""; // Reset iframe source
+        iframe.src = src; // Reapply autoplay parameter
+      }
+    });
+  }
+});
+</script>
+
+

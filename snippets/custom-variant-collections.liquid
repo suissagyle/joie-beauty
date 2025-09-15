@@ -1,0 +1,100 @@
+<div class="custom-variant-collections">
+  <div class="collection-tabs">
+    {% assign collections = "Spring,Summer,Autumn,Winter" | split: ',' %}
+    {% for collection in collections %}
+      <button type="button" class="collection-tab" data-collection="{{ collection }}">{{ collection }}</button>
+    {% endfor %}
+  </div>
+
+  <div class="variant-swatches-block">
+    {% for variant in product.variants %}
+      {% assign collection_name = variant.metafields.custom.collection_name.value %}
+      {% assign color_name = variant.metafields.custom.color_name.value %}
+      {% assign swatch_color = variant.metafields.custom.color_swatch.value %}
+
+      {% if collection_name and color_name and swatch_color %}
+        <button
+          type="button"
+          class="variant-swatch"
+          data-collection="{{ collection_name }}"
+          data-color-name="{{ color_name }}"
+          data-variant-id="{{ variant.id }}"
+          style="background-color: {{ swatch_color }};"
+        ></button>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
+
+<style>
+  .collection-tabs {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 1rem;
+  }
+
+  .collection-tab {
+    background: #f1f1f1;
+    border: none;
+    padding: 8px 14px;
+    cursor: pointer;
+    border-radius: 20px;
+    font-weight: 500;
+    transition: background 0.2s;
+  }
+
+  .collection-tab.active {
+    background: #000;
+    color: #fff;
+  }
+
+  .variant-swatches-block {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+  }
+
+  .variant-swatch {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    display: none; /* hide initially */
+  }
+
+  .variant-swatch.active {
+    display: inline-block;
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const tabs = document.querySelectorAll('.collection-tab');
+    const swatches = document.querySelectorAll('.variant-swatch');
+
+    function showSwatchesFor(collection) {
+      tabs.forEach(tab => tab.classList.remove('active'));
+      swatches.forEach(swatch => {
+        swatch.classList.remove('active');
+        if (swatch.dataset.collection === collection) {
+          swatch.classList.add('active');
+        }
+      });
+
+      document.querySelector(`.collection-tab[data-collection="${collection}"]`)?.classList.add('active');
+    }
+
+    // Default to first collection
+    if (tabs.length > 0) {
+      showSwatchesFor(tabs[0].dataset.collection);
+    }
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        showSwatchesFor(tab.dataset.collection);
+      });
+    });
+  });
+</script>

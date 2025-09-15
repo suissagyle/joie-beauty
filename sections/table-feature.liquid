@@ -1,0 +1,254 @@
+{% schema %}
+{
+  "name": "Custom Table Section",
+  "settings": [
+    {
+      "type": "color",
+      "id": "section_bg_color",
+      "label": "Section Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "table_bg_color",
+      "label": "Table Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "text",
+      "id": "section_title",
+      "label": "Section Title",
+      "default": "Why JOIE?"
+    },
+    {
+      "type": "textarea",
+      "id": "section_description",
+      "label": "Section Description",
+      "default": "Backed by expertise from top color analysis studios and the minds behind."
+    },
+    {
+      "type": "text",
+      "id": "table_heading",
+      "label": "Table Heading",
+    },
+    {
+      "type": "header",
+      "content": "Table Columns"
+    },
+    {
+      "type": "text",
+      "id": "column_1_name",
+      "label": "Column 1 Name",
+      "default": "JOIE Beauty Color Test"
+    },
+    {
+      "type": "text",
+      "id": "column_2_name",
+      "label": "Column 2 Name",
+      "default": "Other Studio"
+    },
+    {
+      "type": "text",
+      "id": "column_3_name",
+      "label": "Column 3 Name",
+      "default": "Other Color Test"
+    },
+    {
+      "type": "textarea",
+      "id": "column_1_rows",
+      "label": "Column 1 Rows (Comma Separated)"
+    },
+    {
+      "type": "textarea",
+      "id": "column_2_rows",
+      "label": "Column 2 Rows (Comma Separated)"
+    },
+    {
+      "type": "textarea",
+      "id": "column_3_rows",
+      "label": "Column 3 Rows (Comma Separated)"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom Table Section"
+    }
+  ]
+}
+{% endschema %}
+
+<style>
+  .section-table-feature {
+    padding: 40px;
+    background-color: {{ section.settings.section_bg_color }};
+  }
+  .section-table-feature .main-container {
+    background-color: white;
+    border-radius: 15px;
+  }
+  .table-feature {
+    max-width: 1680px;
+    margin: 0 auto;
+    padding: 60px 20px;
+    border-radius: 10px;
+    background-color: {{ section.settings.table_bg_color }};
+  }
+  .custom-table {
+    width: 95%;
+    height: auto;
+    max-height: 550px;
+    padding: 20px 30px;
+    margin: 20px auto;
+    position: relative;
+    border-collapse: collapse;
+  }
+  .custom-table .column {
+    padding: 30px 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: baseline;
+    align-items: baseline;
+  }
+  .custom-table .column span {
+    width: 100%;
+    height: auto;
+    padding: 15px 10px;
+    display: block;
+    text-align: center;
+    border-bottom: 1px solid #00000033;
+    color: var(--Color-Main---Monotone-600, #666);
+    text-shadow: 0px 2px 5px rgba(255, 255, 255, 0.05);
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 300;
+    line-height: var(--Font-Line-Height-Small-title---H3, 28px); /* 155.556% */
+    letter-spacing: 0.25px;
+  }
+  .custom-table .column span:first-child {
+    font-weight: 600;
+  }
+  .custom-table .column.first {
+    padding-left: 30px;
+  }
+  .custom-table .column.first span {
+    text-align: left !important;
+    color: #000;
+    font-family: "Poppins Regular";
+    font-style: normal;
+    font-weight: 500;
+    line-height: 28px;
+    letter-spacing: 0.25px;
+  }
+  .custom-table .column:last-child span {
+    text-align: right;
+  }
+  .custom-table .column.first span:first-child {
+    background: var(--Gradient, linear-gradient(90deg, var(--color-supportive-seasonal-color-light-spring-warm-rose-pink, #F7A8A8) 0%, var(--color-supportive-seasonal-color-true-spring-coral-pink, #F76C6C) 25%, var(--color-supportive-seasonal-color-bright-spring-bright-peachy-pink, #FF8484) 40%, var(--color-supportive-seasonal-color-light-summer-soft-pink-rose, #E1A2A2) 55%, var(--color-supportive-seasonal-color-true-summer-cool-rose-pink, #CC7B7B) 85%, var(--color-supportive-seasonal-color-soft-summer-muted-mauve-pink, #C69CA3) 100%));
+    background-clip: text;
+    font-family: "Poppins Medium";
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .custom-table .column.first span:nth-child(6) {
+    color: #72D133;;
+    max-width: 90%;
+  }
+  .custom-table .column span:last-child, .custom-table .column span:nth-child(6),
+  .custom-table .column.first span:nth-child(6){
+    border-bottom: none;
+  }
+  
+  .highlight {
+    width: 35%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    display: block !important;
+    z-index: 2;
+    position: absolute;
+    border-radius: 30px;
+    border: 0.75px solid var(--Gradient, #F7A8A8);
+    background: rgba(255, 255, 255, 0.20);
+    box-shadow: 0px 0px 10px 6px rgba(255, 211, 211, 0.50);
+  }
+
+  @media(max-width: 1024px) {
+    .custom-table .column.first {
+      padding-left: 0 !important;
+    }
+  }
+
+  @media(max-width: 768px) {
+    .section-table-feature {
+      padding: 0;
+    }
+    .custom-table .column {
+      padding: 10px 0;
+    }
+    .custom-table .column.first {
+      padding-left: 30px;
+    }
+    .custom-table {
+      width: 133%;
+      padding: 0;
+      max-height: 420px;
+    }
+    .custom-table .column span {
+      font-size: 14px;
+      padding: 10px;
+    }
+    .custom-table-wrap {
+      overflow-y: hidden;
+      overflow-x: scroll;
+      padding: 15px;
+    }
+    .highlight {
+      width: 36%;
+      left: -15px;
+    }
+    .custom-table .column.first span:nth-child(6) {
+      max-width: 99%;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .custom-table {
+      width: 205%;
+    }
+  }
+</style>
+<section class="section-table-feature">
+  <div class="main-container">
+    <div class="table-feature">
+      <h2 class="center m-0 mt-6">{{ section.settings.section_title }}</h2>
+      <p class="center">{{ section.settings.section_description }}</p>
+      <h3>{{ section.settings.table_heading }}</h3>
+      <div class="custom-table-wrap">
+        <div class="custom-table d-flex mt-20 m-auto">
+            <div class=highlight></div>
+            <div class="column first w-33">
+               <span class="pink-title">{{ section.settings.column_1_name }}</span>
+              {% assign column_1_data = section.settings.column_1_rows | split: "," %}
+              {% for i in (0..column_1_data.size) %}
+                 <span>{{ column_1_data[i] }}</span>
+              {% endfor %}
+            </div>
+            <div class="column w-33">
+              <span >{{ section.settings.column_2_name }}</span>
+              {% assign column_2_data = section.settings.column_2_rows | split: "," %}
+              {% for i in (0..column_2_data.size) %}
+                 <span>{{ column_2_data[i]}}</span>
+              {% endfor %}
+            </div>
+            <div class="column w-33">
+              <span >{{ section.settings.column_3_name }}</span>
+              {% assign column_3_data = section.settings.column_3_rows | split: "," %}
+              {% for i in (0..column_3_data.size) %}
+                 <span>{{ column_3_data[i]}}</span>
+              {% endfor %}
+            </div>
+          </div>
+      </div>
+      </div>
+  </div>
+</section>

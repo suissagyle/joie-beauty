@@ -1,0 +1,196 @@
+{% schema %}
+{
+  "name": "App Slider Section",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color Scheme"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "icon",
+      "label": "Icon"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description"
+    },
+    {
+      "type": "range",
+      "id": "autoplay_delay",
+      "label": "Autoplay Delay (seconds)",
+      "min": 1,
+      "max": 10,
+      "step": 1,
+      "default": 3
+    }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Slider Image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "App Slider Section"
+    }
+  ]
+}
+{% endschema %}
+
+<style>
+  .centered-slider {
+    position: relative;
+    text-align: center;
+    padding: 200px 20px 100px;
+    {% if section.settings.background_image %}
+      background-image: url('{{ section.settings.background_image | img_url: 'large' }}');
+      background-position: top;
+      background-size: contain;
+      background-repeat: no-repeat;
+    {% endif %}
+  }
+  .bg-overlay {
+    display: block !important;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 145x;
+    z-index: 20;
+    background-image: url('https://cdn.shopify.com/s/files/1/0690/7592/7092/files/bottom-bg.png?v=1743601768');
+    background-position: top;
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
+  
+  .slider-container {
+    overflow: hidden;
+    position: relative;
+    width: 100vw;
+    margin: 0 auto;
+  }
+  .slider {
+    display: flex;
+    justify-content: left;
+    width: 100%;
+    transform: translateX(71%);
+    transition: transform 8s ease-out;
+  }
+  
+  .slider.animate-in {
+    transform: translateX(0);
+  }
+  
+  .slider-slide {
+    width: 180px;
+    height: 390px;
+    border-radius: 15px;
+    margin: 10px;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  
+  .slider-slide img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover;
+  }
+  
+  @media(max-width: 1920px) {
+    .centered-slider {
+      padding: 150px 20px 150px;
+    }
+    
+  }
+
+  /* Mobile Styles */
+  @media (max-width: 768px) {
+    .slider-container {
+      width: 94vw;
+      overflow-x: auto;
+      display: flex;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+    }
+  
+    .slider {
+      flex-wrap: nowrap;
+      transition: none;
+      justify-content: left;
+      transform: none !important;
+      opacity: 1 !important;
+    }
+  
+    .slider-slide {
+      scroll-snap-align: start;
+    }
+    
+    .bg-overlay {
+        height: 18px !important;
+    }
+  }
+</style>
+
+<div class="centered-slider">
+  <div class="bg-overlay"></div>
+  <div class="section-container">
+    {% if section.settings.icon %}
+      <img src="{{ section.settings.icon | image_url }}" alt="Icon" width="35" height="35">
+    {% endif %}
+    <h2 class="m-0">{{ section.settings.title }}</h2>
+    <p class="m-auto w-30 mb-6">{{ section.settings.description }}</p>
+    <div class="slider-container mt-4">
+      <div class="slider">
+        {% for block in section.blocks %}
+          {% if block.settings.image %}
+            <div class="slider-slide">
+              <img src="{{ block.settings.image | image_url }}" alt="Slider Image">
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+    </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const sliderContainer = document.querySelector(".slider-container");
+    const slider = document.querySelector(".slider");
+
+    // Desktop only animation
+    if (window.innerWidth > 768) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            slider.classList.add("animate-in");
+            observer.unobserve(sliderContainer);
+          }
+        });
+      }, { threshold: 0.5 });
+
+      observer.observe(sliderContainer);
+    }
+  });
+</script>

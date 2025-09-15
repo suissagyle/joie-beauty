@@ -1,0 +1,649 @@
+{% schema %}
+{
+  "name": "Two Column Package",
+  "settings": [
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color"
+    },
+    { 
+      "type": "text", 
+      "id": "title", 
+      "label": "Title", 
+      "default": "Choose your Package" 
+    },
+    { "type": "textarea", 
+      "id": "description", 
+      "label": "Paragraph" , 
+      "default": "Backed by expertise from top color analysis studios and the minds behind."
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button Label 1"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "row1_col1",
+      "name": "Row 1 Col 1: Image",
+      "settings": [
+        { 
+          "type": "image_picker", 
+          "id": "promote_image", 
+          "label": "Promote Image" 
+        }
+      ]
+    },
+    {
+      "type": "row1_col3",
+      "name": "Row 1 Col 2: Best Deals",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product1",
+          "label": "Select Product 1"
+        },
+        {
+          "type": "text",
+          "id": "caption1",
+          "label": "Product Caption",
+          "default": "Best Deal"
+        },
+        {
+          "type": "text",
+          "id": "subheading1",
+          "label": "Product Subheading",
+          "default": "Limited time only!"
+        },
+        {
+          "type": "text",
+          "id": "button_label1",
+          "label": "Button Label",
+          "default": "Shop Now"
+        },
+        {
+          "type": "url",
+          "id": "button_link1",
+          "label": "Button Link"
+        },
+        {
+          "type": "text",
+          "id": "modal_label1",
+          "label": "Modal 1 Label",
+          "default": "Details"
+        },
+        {
+          "type": "product",
+          "id": "product2",
+          "label": "Select Product 2"
+        },
+        {
+          "type": "text",
+          "id": "caption2",
+          "label": "Product Caption2",
+          "default": "Best Deal"
+        },
+        {
+          "type": "text",
+          "id": "subheading2",
+          "label": "Product Subheading",
+          "default": "Limited time only!"
+        },
+        {
+          "type": "text",
+          "id": "button_label2",
+          "label": "Button Label",
+          "default": "Shop Now"
+        },
+        {
+          "type": "url",
+          "id": "button_link2",
+          "label": "Button Link"
+        },
+        {
+          "type": "text",
+          "id": "modal_label2",
+          "label": "Modal 2 Label",
+          "default": "Details"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    { "name": "Two Column Package"}
+  ]
+}
+{% endschema %}
+
+<style>
+  .two-row-section {
+    flex-direction: column;
+    padding: 30px;
+  }
+  
+  .two-row-section.package .column {
+    padding: 0;
+    min-height: auto;
+  }
+
+  .two-row-section.package a.white {
+    width: 450px;
+    font-size: 14px;
+    display: block;
+    background-color: transparent;
+    color: #000;
+    padding: 10px;
+    text-align: center;
+    margin: 60px auto 0;
+    background-color: #fff;
+    border-radius: 10px !important;
+    text-decoration: none;
+    border: none !important;
+  }
+
+  .package .main-container {
+    background-color: #fff;
+    border-radius: 15px;
+  }
+
+  .two-row-section li {
+    list-style: none;
+    position: relative;
+    padding-left:50px;
+    color: #000;
+    text-shadow: 0px 2px 5px rgba(255, 255, 255, 0.05);
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 275;
+    line-height: 26px; /* 162.5% */
+    letter-spacing: 0.75px;
+    border-bottom: 1px solid #00000021;
+    padding: 20px;
+  }
+  .two-row-section li:before {
+    width: 8px;
+    height: 8px;
+    content:"\f111"; 
+    font-family: FontAwesome;
+    position: absolute;
+    left: 0;
+    color: #F7A8A8;
+    font-size: 8px;
+  }
+  
+  .package .best-deal-wrapper {
+    width: 100%;
+    padding: 50px 10px;
+    text-align: left;
+    background-color: white;
+  }
+
+  .package img {
+    width: 100%;
+  }
+
+  .package .best-deal-wrapper:first-child {
+    /* border-bottom: 1px solid #ccc; */
+  }
+
+  .product-promo {
+    position: relative;
+    flex-wrap: wrap;
+    align-items: center;
+    align-content: center;
+  }
+
+  .product-promo .caption {
+    text-align: center;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 150%; /* 21px */
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    background: var(--Gradient, linear-gradient(90deg, var(--color-supportive-seasonal-color-light-spring-warm-rose-pink, #F7A8A8) 0%, var(--color-supportive-seasonal-color-true-spring-coral-pink, #F76C6C) 25%, var(--color-supportive-seasonal-color-bright-spring-bright-peachy-pink, #FF8484) 40%, var(--color-supportive-seasonal-color-light-summer-soft-pink-rose, #E1A2A2) 55%, var(--color-supportive-seasonal-color-true-summer-cool-rose-pink, #CC7B7B) 85%, var(--color-supportive-seasonal-color-soft-summer-muted-mauve-pink, #C69CA3) 100%));
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .best-deal-wrapper ul {
+    padding-left: 0;
+  }
+
+  .package .best-deal-wrapper .d-flex {
+    flex-wrap: wrap;
+  }
+
+  .best-deal-wrapper li {
+    border-bottom: 0 !important;
+    padding: 0 5px !important;
+  }
+
+  .best-deal-wrapper ul li::before {
+    color: #F7A8A8;
+    width: 3px;
+    height: 3px;
+    font-size: 7px;
+    padding: 0;
+  }
+
+  
+  .product-promo .product-title {
+    font-size: 24px;
+    font-style: normal;
+    font-family: "Poppins Regular";
+    line-height: 36px; /* 83.333% */
+    letter-spacing: 0.25px;
+    background: var(--Gradient, linear-gradient(90deg, var(--color-supportive-seasonal-color-light-spring-warm-rose-pink, #F7A8A8) 0%, var(--color-supportive-seasonal-color-true-spring-coral-pink, #F76C6C) 25%, var(--color-supportive-seasonal-color-bright-spring-bright-peachy-pink, #FF8484) 40%, var(--color-supportive-seasonal-color-light-summer-soft-pink-rose, #E1A2A2) 55%, var(--color-supportive-seasonal-color-true-summer-cool-rose-pink, #CC7B7B) 85%, var(--color-supportive-seasonal-color-soft-summer-muted-mauve-pink, #C69CA3) 100%));
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .product-promo .product-title.black {
+    color: #000;
+    background: none !important;
+    -webkit-text-fill-color: black;
+  }
+  
+  .product-promo .product-price {
+    color: #000;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 300;
+    line-height: 18px; /* 112.5% */
+    letter-spacing: -0.176px;
+  }
+  
+  .product-promo .product-subheading {
+    color: #000;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 300;
+    line-height: 24px; /* 150% */
+    letter-spacing: -0.176px;
+  }
+
+  .package .buy-button-plain, 
+  .package .buy-button-deal {
+    width: 225px;
+    height: 37px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 300;
+    line-height: 150%; /* 21px */
+    letter-spacing: 1px;
+  }
+
+  .package .product-promo .product-title {
+    line-height: normal;
+  }
+
+  .product-modal {
+    position: absolute;
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%;
+    display: none; /* Starts hidden */
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+    max-width: 492px;
+    max-height: 565px;
+    padding: 18px 21px;
+    border-radius: 10px;
+    background: #fff;
+    box-shadow: 0px 0px 12px 0px rgba(255, 126, 126, 0.10);
+  }
+  
+  .modal-content {
+    background: #fff;
+    padding: 20px;
+    width: 100%;
+    max-width: 600px;
+    border-radius: 8px;
+    position: relative;
+  }
+
+  .modal-content h2 {
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 300;
+    line-height: 36px; /* 133.333% */
+    letter-spacing: 1.5px;
+    text-transform: capitalize;
+    background: var(--Gradient, linear-gradient(90deg, var(--color-supportive-seasonal-color-light-spring-warm-rose-pink, #F7A8A8) 0%, var(--color-supportive-seasonal-color-true-spring-coral-pink, #F76C6C) 25%, var(--color-supportive-seasonal-color-bright-spring-bright-peachy-pink, #FF8484) 40%, var(--color-supportive-seasonal-color-light-summer-soft-pink-rose, #E1A2A2) 55%, var(--color-supportive-seasonal-color-true-summer-cool-rose-pink, #CC7B7B) 85%, var(--color-supportive-seasonal-color-soft-summer-muted-mauve-pink, #C69CA3) 100%));
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .modal-content ul li {
+    padding-left: 20px !important;
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+    border-bottom: 1px solid #ccc !important;
+    color: #000;
+    text-shadow: 0px 2px 5px rgba(255, 255, 255, 0.05);
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 275;
+    line-height: 27px;
+    letter-spacing: 0.75px;
+  }
+
+  .modal-content ul li:last-child {
+    border-bottom: none !important;
+  }
+  
+  .close-modal {
+    position: absolute;
+    top: -20px;
+    right: 15px;
+    font-size: 32px;
+    cursor: pointer;
+    text-transform: capitalize;
+    background: var(--Gradient, linear-gradient(90deg, var(--color-supportive-seasonal-color-light-spring-warm-rose-pink, #F7A8A8) 0%, var(--color-supportive-seasonal-color-true-spring-coral-pink, #F76C6C) 25%, var(--color-supportive-seasonal-color-bright-spring-bright-peachy-pink, #FF8484) 40%, var(--color-supportive-seasonal-color-light-summer-soft-pink-rose, #E1A2A2) 55%, var(--color-supportive-seasonal-color-true-summer-cool-rose-pink, #CC7B7B) 85%, var(--color-supportive-seasonal-color-soft-summer-muted-mauve-pink, #C69CA3) 100%));
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  @media(max-width: 1680px) {
+    .package .best-deal-wrapper {
+      width: 100%;
+      padding: 20px 15px;
+    }
+    .two-row-section.package a.white {
+      max-width: 316px;
+      font-size: 14px;
+    }
+    .package .buy-button-plain, 
+    .package .buy-button-deal {
+      width: 205px;
+      height: 37px;
+      font-size: 14px;
+    }
+    .product-promo .caption {
+      font-size: 12px;
+    }
+     .product-promo .product-title {
+      font-size: 24px;
+      line-height: 20px; 
+     }
+    .product-promo .product-price,
+    .product-promo .product-subheading {
+      font-size: 16px;
+    }
+  }
+  
+  @media(max-width: 1024px) {
+    .package h2 {
+        margin: 30px 0;
+        font-size: 16px !important;
+        line-height: 17px !important;
+    }
+    .product-promo .product-title {
+      line-height: normal;
+    }
+    .section-p {
+      color: #000;
+    }
+    .best-deal-wrapper .w-40 {
+      display: flex;
+      flex-wrap: nowrap !important;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .two-row-section .caption li {
+      border-bottom: 0;
+      padding: 0 15px;
+    }
+    .two-row-section .caption li::before {
+      width: 3px;
+      height: 3px;
+      font-size: 7px;
+      padding: 0;
+    }
+    .two-row-section.image .column {
+      min-height: 180px;
+      padding-bottom: 30px;
+      flex: auto;
+      align-content: baseline;
+    }
+    .two-row-section.image .column ul {
+      padding-left: 0;
+    }
+
+    .two-row-section.image .modal-content ul {
+        padding: 10px 0 0;
+        margin: 0;
+    }
+    .two-row-section.image .row1 {
+      display: flex;
+      flex-wrap: wrap;
+      flex-direction: row;
+      text-align: center;
+    }
+    .two-row-section.image .buy-button {
+      margin: 0 auto;
+    }
+    .diamond-image-wrapper.rotate .left {
+      left: 35%;
+    }
+    .diamond-img.bottom {
+      left: 50%;
+    }
+    .modal-content h3 {
+      font-size: 18px;
+      line-height: 26px; /* 144.444% */
+      letter-spacing: 1.5px;
+    }
+    .modal-content ul li {
+      font-size: 14px !important;
+      font-weight: 275;
+      line-height: 18px; /* 171.429% */
+      letter-spacing: 0.75px;
+    }
+    .package .buy-button-plain, .package .buy-button-deal {
+        width: 48%;
+        height: 35px;
+        min-height: 35px;
+        font-size: 14px;
+        margin: 0;
+    }
+    .product-modal {
+      top: 5%;
+      left: 6%;
+      position: absolute;
+      max-width: 311px;
+      height: auto;
+      overflow: hidden;
+      max-height: fit-content;
+      padding: 0px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.95);
+      box-shadow: 0px 0px 12px 0px rgba(255, 126, 126, 0.25);
+      backdrop-filter: blur(4px);
+    }
+    .package .modal-content h2 {
+      margin: 10px 0 0;
+    }
+    .close-modal {
+      position: absolute;
+      top: -10px;
+      right: 5px;
+    }
+  }
+</style>
+<section class="two-row-section image package center" style="background-color: {{ section.settings.background_color }};">
+    <h2 class="m-0">{{ section.settings.title }}</h2>
+    <p class="m-0 mb-6 mobile-hide">{{ section.settings.description }}</p>
+  <div class="main-container center mt-6">
+    <div class="d-flex w-100 m-auto">
+      <div class="column w-40 d-flex flex-wrap align-items-center align-content-center">
+        <img src="{{ section.blocks[0].settings.promote_image | img_url: '750x' }}" />
+      </div>
+      <div class="column w-60 p-0-mobile product-promo d-flex text-center">
+        <div class="best-deal-wrapper">
+          <div class="d-flex align-items-end">
+            <div class="w-60">
+              <ul class="w-100 m-0 mb-2 d-flex align-items-center">
+                <li>&nbsp;</li><span class="caption">{{ section.blocks[1].settings.caption1 }}</span></li>
+              </ul>
+              {% assign product = all_products[section.blocks[1].settings.product1] %}
+              {% if product %}
+                <h3 class="w-100 product-title m-0 mb-2">{{ product.title }}</h3>
+                <p class="w-100 product-price m-0 mb-2">
+                  {{ product.price | money }} 
+                  {% if product.compare_at_price > product.price %}
+                    <span class="ms-10 slash">{{ product.compare_at_price | money }}</span>
+                  {% endif %}
+                </p>
+                <p class="w-100 product-subheading m-0 mb-4">{{ product.metafields.custom.subheading }}</p>
+              </div> 
+              <div class="w-40 d-flex justify-center">
+                <a href="{{ section.blocks[1].settings.button_link1 }}" class="buy-button-plain">
+                  {{ section.blocks[1].settings.button_label1 }}
+                </a>
+                <button class="modal-button buy-button-deal" data-modal-id="modal-{{ product.id }}">
+                  {{ section.blocks[1].settings.modal_label1 }}
+                </button>
+                <!-- Modal 2 -->
+                <div id="modal-{{ product.id }}" class="product-modal" style="display:none;">
+                  <div class="modal-content">
+                    <span class="close-modal">&times;</span>
+                    <h2 class="m-0">{{ product.metafields.custom.details }}</h2>
+                     {% if product.metafields.custom.details_list != blank %}
+                        <ul>
+                          {% for item in product.metafields.custom.details_list.value %}
+                            <li>{{ item }}</li>
+                          {% endfor %}
+                        </ul>
+                      {% endif %}
+                  </div>
+                </div>
+                <!-- Modal 2 -->
+              </div>
+              
+              {% else %}
+                <p>Please select a product</p>
+              {% endif %}
+            </div>
+          </div>
+          <div class="best-deal-wrapper">
+          <div class="d-flex align-items-end">
+            <div class="w-60">
+              {% assign product = all_products[section.blocks[1].settings.product2] %}
+              {% if product %}
+                <h3 class="w-100 product-title black m-0 mb-2">{{ product.title }}</h3>
+                <p class="w-100 product-price m-0 mb-2">
+                  {{ product.price | money }} 
+                  {% if product.compare_at_price > product.price %}
+                    <span class="ms-10 slash">{{ product.compare_at_price | money }}</span>
+                  {% endif %}
+                </p>
+                <p class="w-100 product-subheading m-0 mb-4">{{ product.metafields.custom.subheading }}</p>
+              </div> 
+              <div class="w-40 d-flex justify-center">
+                <a href="{{ section.blocks[1].settings.button_link2 }}" class="buy-button-plain">
+                  {{ section.blocks[1].settings.button_label2 }}
+                </a>
+                <button class="modal-button buy-button-deal" data-modal-id="modal-{{ product.id }}">
+                  {{ section.blocks[1].settings.modal_label2 }}
+                </button>
+
+                <div id="modal-{{ product.id }}" class="product-modal" style="display: none;">
+                  <div class="modal-content">
+                    <span class="close-modal">&times;</span>
+                    <h2 class="m-0">{{ product.metafields.custom.details }}</h2>
+                    {% if product.metafields.custom.details_list != blank %}
+                    <ul>
+                      {% for item in product.metafields.custom.details_list.value %}
+                        <li>{{ item }}</li>
+                      {% endfor %}
+                    </ul>
+                  {% endif %}
+                  </div>
+                </div>
+              </div>
+              {% else %}
+                <p>Please select a product</p>
+              {% endif %}
+            </div>
+          </div> 
+        </div>
+      </div>
+    </div>
+   <a href="{{ section.settings.button_link}}" class="white d-block m-auto mt-6">{{ section.settings.button_label }}</a> 
+</section>
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const diamond = document.getElementById("diamond-rotation");
+
+    if (!diamond) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            diamond.classList.add("rotate");
+          } else {
+            diamond.classList.remove("rotate");
+          }
+        });
+      },
+      { threshold: 0.6 }
+    );
+
+    observer.observe(diamond);
+    
+  });
+
+</script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    // Show modal when button is clicked
+    document.querySelectorAll(".modal-button").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        const modalId = btn.getAttribute("data-modal-id");
+        const modal = document.getElementById(modalId);
+        if (modal) {
+          modal.style.display = "flex";
+        }
+      });
+    });
+
+    // Hide modal when 'x' is clicked
+    document.querySelectorAll(".close-modal").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        const modal = btn.closest(".product-modal");
+        modal.style.display = "none";
+      });
+    });
+
+    // Hide modal when clicking outside the modal content
+    document.querySelectorAll(".product-modal").forEach(function (modal) {
+      modal.addEventListener("click", function (event) {
+        if (event.target === modal) {
+          modal.style.display = "none";
+        }
+      });
+    });
+  });
+</script>
+

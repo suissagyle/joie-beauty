@@ -1,0 +1,584 @@
+{% schema %}
+{
+  "name": "Video Marquee",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Our Customer Feedback"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "icon",
+      "label": "Icon"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "An exclusive member-only app you will get for 'Free' after purchasing the color card."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "video",
+      "name": "Video",
+      "settings": [
+        {
+          "type": "text",
+          "id": "video_name",
+          "label": "Video Name",
+          "default": "Customer Testimonial"
+        },
+        {
+          "type": "range",
+          "id": "star_rating",
+          "label": "Star Rating",
+          "min": 0,
+          "max": 5,
+          "step": 1,
+          "default": 5
+        },
+        {
+          "type": "textarea",
+          "id": "video_caption",
+          "label": "Caption",
+          "default": "Amazing results after using our product!"
+        },
+        {
+          "type": "image_picker",
+          "id": "video_cover",
+          "label": "Video Cover Image"
+        },
+        { 
+          "type": "text", 
+          "id": "video_url", 
+          "label": "Video URL (Video Upload)"
+        },
+        {
+          "type": "url",
+          "id": "video_link",
+          "label": "Reels URL"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Video Marquee",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %}
+
+<section class="video-marquee p-20-mobile">
+  <div class="bg-overlay"></div>
+  <div class="">
+     {% if section.settings.icon %}
+      <img src="{{ section.settings.icon | image_url }}" alt="Icon" width="35" height="35">
+    {% endif %}
+    <h2>{{ section.settings.title }}</h2>
+    <p class="section-p m-auto">{{ section.settings.description }}</p>
+    <div class="marquee-container">
+      <div class="marquee-overlay overlay-left"></div>
+        <div class="marquee">
+          <div class="marquee-content">
+            {% for block in section.blocks %}
+              <div class="video-item">
+                {% if block.settings.video_cover %}
+                  <div class="video-cover">
+                  {% if block.settings.video_url != blank %}
+                    <button class="play-btn">▶</button>
+                    <button class="pause-btn" style="display:none;">❚❚</button>
+                   {% endif %}
+                    {% if block.settings.video_cover %}
+                      <img src="{{ block.settings.video_cover | image_url }}" alt="Video Cover">
+                    {% endif %}
+                     <div class="video-info">
+                      <div class="d-flex align-items-center justify-between">
+                        <div class="star-rating">
+                          {% for i in (1..block.settings.star_rating) %}
+                            ★
+                          {% endfor %}
+                        </div>
+                        <h3 class="video-name m-0">{{ block.settings.video_name }}</h3>
+                      </div>
+                      <p class="w-100 video-caption m-0">{{ block.settings.video_caption }}</p>
+                    </div>
+                  </div>
+                              {% endif %}
+{% if block.settings.video_url != blank %}
+  <video
+    class="video"
+    src="{{ block.settings.video_url }}"
+    playsinline
+    preload="none"
+    style="width:100%;height:100%;display:block;"
+  ></video>
+
+{% endif %}
+
+            
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+        <div class="marquee-overlay overlay-right"></div>
+      </div>
+  </div>
+</section>
+
+<style>
+.video-marquee {
+  position: relative;
+  padding: 150px 0 150px;
+  text-align: center;
+  overflow: hidden;
+    {% if section.settings.background_image %}
+      background-image: url('{{ section.settings.background_image | img_url: 'large' }}');
+      background-position: top;
+      background-size: contain;
+      background-repeat: no-repeat;
+    {% endif %}
+}
+  
+.bg-overlay {
+  display: block !important;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 2;
+  height: 80px;
+  background-image: url('https://cdn.shopify.com/s/files/1/0690/7592/7092/files/bottom-bg.png?v=1743601768');
+  background-position: top;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.video-marquee .marquee-container {
+  position: relative;
+  overflow-x: visible;
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+}
+  
+.video-marquee .marquee {
+  height: 450px !important;
+  width: 100% !important;
+  display: flex;
+  overflow-x: auto;
+  white-space: nowrap;
+  position: relative;
+  justify-content: center;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x mandatory;
+  touch-action: pan-x;
+}
+
+
+.marquee-content {
+  display: flex;
+  align-items: center;
+  transition: transform 0.5s ease-in-out;
+  position: relative;
+  justify-content: center;
+}
+
+/* Remove centering */
+.video-item:first-child {
+  transform: translateX(0);
+}
+
+  
+.video-marquee  .marquee:hover {
+  background: transparent !important;
+}
+
+.marquee-content {
+  display: flex;
+  flex-wrap: nowrap;
+}
+  
+.video-item {
+  width: 200px;
+  height: 390px;
+  position: relative;
+  margin: 0 5px;
+  transition: width 0.5s ease-in-out, transform 0.5s ease-in-out;
+  text-align: center;
+}
+
+.video-item:hover {
+  width: 500px; 
+  overflow: hidden;
+}
+
+
+.video-cover {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0px;
+  cursor: pointer;
+}
+
+.video-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  order-radius: 15px;
+}
+
+.play-btn,
+.pause-btn {
+  opacity: 0;
+  top: 45%;
+  left: 45%;
+  color: #fff;
+  position: absolute;
+  background: rgb(40 38 38 / 80%);
+  border: none;
+  border-radius: 50%;
+  padding: 12px 16px;
+  font-size: 20px;
+  cursor: pointer;
+  z-index: 4;
+  transition: background 0.3s ease;
+}
+
+.pause-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 30px;
+  color: white;
+  border-radius: 50%;
+  padding: 10px;
+  opacity: 0;
+  pointer-events: none; /* Prevents icon from interfering with video click */
+  transition: opacity 0.5s ease;
+}
+
+.video-item:hover .play-btn {
+  opacity: 1;
+}
+
+.play-btn:hover {
+   background: rgb(40 38 38 / 60%);
+}
+
+.video-info {
+  opacity: 0;
+  color: white;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  min-height: 40px;
+  z-index: 5;
+}
+
+.video-item video, .video-item iframe {
+  width: 100%;
+  height: 100%;
+  display: none;
+}
+
+.video-item .video {
+  position: absolute;
+  top: 5px;
+  left: 0;
+  width: 100%;
+  height: 98% !important;
+  border-radius: 15px;
+  object-fit: cover;
+  display: none;
+  z-index: 0;
+}
+
+  
+.video-item:hover .video-info {
+  transition-delay: 0.5s;
+  transition-property: opacity;
+   opacity: 1;
+}
+
+.video-name {
+  color: #FFF;
+  text-align: center;
+  font-family: Poppins;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 150%; /* 24px */
+  letter-spacing: var(--Font-Letter-spacing-Description---Small, 0.25px);
+}
+
+.star-rating {
+  color: #fff;
+  font-size: 14px;
+  margin: 5px 0;
+}
+
+.video-caption {
+  color: #fff;
+  text-shadow: 0px 2px 5px rgba(255, 255, 255, 0.05);
+  font-size: 20px;
+  font-style: normal;
+  text-align: left;
+  font-weight: 275;
+  line-height: 34px; /* 170% */
+  letter-spacing: 0.5px;
+  white-space: break-spaces;
+}
+
+/* Shrink adjacent items */
+.video-item:not(:hover) {
+  transition: width 0.5s ease-in-out, transform 0.5s ease-in-out;
+}
+
+.video-item:hover + .video-item,
+.video-item:has(+ .video-item:hover) {
+  width: 180px; /* Shrink adjacent items slightly */
+}
+
+.video-item:hover video, .video-item:hover iframe {
+  display: block;
+}
+
+/* Blurring White Overlay */
+.marquee-overlay {
+  position: absolute;
+  z-index: 5;
+  top: 0;
+  width: 100px;
+  height: 100%;
+  background: linear-gradient(to right, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
+  z-index: 2;
+  pointer-events: none;
+}
+
+.overlay-left {
+  left: 0;
+  width: 30vw;
+  display: block !important;
+}
+
+.overlay-right {
+  right: 0;
+  width: 30vw;
+  display: block !important;
+  transform: rotate(180deg);
+}
+
+.video-marquee .marquee.dragging {
+  cursor: grabbing;
+  user-select: none;
+}
+
+@media(max-width: 1024px){
+  .video-marquee {
+    padding: 40px 0px !important;
+  }
+  .video-item {
+    width: 160px;
+    height: 340px;
+    border-radius: 15px;
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+  }
+  .video-marquee .marquee {
+    display: flex;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    gap: 10px;
+  }
+  .marquee-content {
+    flex-wrap: nowrap;
+  }
+  .overlay-left, .overlay-right {
+    width: 0 !important;
+  }
+  .video-item:active .play-button {
+    opacity: 1; /* Show play button on touch/click for mobile */
+  }
+}
+
+@media(max-width: 600px) {
+  .video-item:hover {
+    width: 280px;
+  }
+  .video-caption, .video-name {
+    font-size: 12px;
+    line-height: 20px;
+  }
+  .video-marquee h2, .video-marquee p {
+    padding: 0 20px;
+  }
+}
+
+</style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    // Get elements from the page
+    const videoElement = document.getElementById('video');
+    const videoCover = document.querySelector('.video-cover');
+
+
+    // Play button click listener
+    document.querySelectorAll(".play-btn").forEach((btn) => {
+      
+      btn.addEventListener("click", () => {
+        console.log("Play clicked");
+        
+
+        const container = btn.closest(".video-item");
+        container.style.width = '200px';
+        if (!container) return;
+        const pauseBtn = container.querySelector(".pause-btn");
+        const video = container.querySelector("video");
+        const cover = container.querySelector(".video-cover");
+
+        if (!video || !cover) return;
+
+        // Pause all other videos and reset their covers
+        document.querySelectorAll('.video').forEach((v) => {
+          if (v !== video) {
+            v.pause();
+            v.currentTime = 0;
+            v.style.display = "none";
+            // Reset the cover of the other videos
+            const otherCover = v.closest('.video-item').querySelector('.video-cover');
+            if (otherCover) {
+              otherCover.style.display = "flex"; // Show the cover again
+            }
+          }
+        });
+
+        // Play the current video
+        video.style.display = "block"; // Show the video
+        cover.style.display = "none"; // Hide the cover for the current video
+        pauseBtn.style.display = "block";
+        video.play().catch((e) => console.error("Video play error", e));
+      });
+    });
+
+
+
+    // Marquee drag functionality (slider behavior for marquee)
+    const marquee = document.querySelector(".video-marquee .marquee");
+    const videos = marquee.querySelectorAll("video");
+    const pauseIcons = [];
+    let isDragging = false;
+    let dragThreshold = 5;
+    let startX = 0;
+    let scrollLeft = 0;
+  
+    marquee.addEventListener("pointerdown", (e) => {
+      isDragging = true;
+      startX = e.pageX;
+      scrollLeft = marquee.scrollLeft;
+    });
+  
+    marquee.addEventListener("pointermove", (e) => {
+      if (!isDragging) return;
+      const x = e.pageX;
+      const distance = Math.abs(x - startX);
+      if (distance > dragThreshold) {
+        marquee.scrollLeft = scrollLeft - (x - startX) * 2;
+      }
+    });
+  
+    marquee.addEventListener("pointerup", () => {
+      isDragging = false;
+    });
+  
+    // Create pause icons and add them to each video
+    videos.forEach((video, index) => {
+      const pauseIcon = document.createElement("div");
+      pauseIcon.classList.add("pause-icon");
+      const svgMarkup = `<svg fill="#000000" height="40px" width="40px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" xml:space="preserve">
+  <path d="M256,0C114.617,0,0,114.615,0,256s114.617,256,256,256s256-114.615,256-256S397.383,0,256,0z
+           M224,320c0,8.836-7.164,16-16,16h-32c-8.836,0-16-7.164-16-16V192c0-8.836,7.164-16,16-16h32c8.836,0,
+           16,7.164,16,16V320z M352,320c0,8.836-7.164,16-16,16h-32c-8.836,0-16-7.164-16-16V192c0-8.836,
+           7.164-16,16-16h32c8.836,0,16,7.164,16,16V320z"/></svg>`;
+
+      pauseIcon.innerHTML = svgMarkup;
+      pauseIcon.style.display = "none"; // Initially hidden
+      video.parentElement.appendChild(pauseIcon);
+      pauseIcons.push(pauseIcon);
+  
+      let tapStartX = 0;
+  
+      video.addEventListener("pointerdown", (e) => {
+        tapStartX = e.pageX;
+      });
+  
+      video.addEventListener("pointerup", (e) => {
+        const tapEndX = e.pageX;
+        const moved = Math.abs(tapEndX - tapStartX) > dragThreshold;
+        if (moved) return;
+  
+        if (video.paused) {
+          // Pause all other videos without resetting currentTime
+          videos.forEach((v) => {
+            if (v !== video) {
+              v.pause();
+              // Hide pause icon for others
+              const index = Array.from(videos).indexOf(v);
+              pauseIcons[index].style.display = "none";
+            }
+          });
+  
+          // Then play this video
+          const playPromise = video.play();
+          if (playPromise !== undefined) {
+            playPromise.catch((error) => {
+              console.warn("Playback prevented:", error);
+            });
+          }
+  
+          // Show the pause icon for this video
+          const index = Array.from(videos).indexOf(video);
+          pauseIcons[index].style.display = "block";
+          pauseIcons[index].style.opacity = "1"; // Make it visible
+          setTimeout(() => {
+            pauseIcons[index].style.opacity = "0"; // Fade out
+          }, 1500); // Fade out after 1.5 seconds
+        } else {
+          video.pause();
+          // Show the pause icon
+          const index = Array.from(videos).indexOf(video);
+          pauseIcons[index].style.display = "block";
+          pauseIcons[index].style.opacity = "1"; // Make it visible
+          setTimeout(() => {
+            pauseIcons[index].style.opacity = "0"; // Fade out
+          }, 1500); // Fade out after 1.5 seconds
+        }
+      });
+    });
+  });
+</script>

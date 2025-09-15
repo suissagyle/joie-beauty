@@ -1,0 +1,181 @@
+{% schema %}
+{
+  "name": "Video Teaser",
+  "settings": [
+    {
+      "type": "text",
+      "id": "video_url",
+      "label": "Video URL (YouTube Short or TikTok)",
+      "default": "https://www.youtube.com/shorts/abc123"
+    },
+    {
+      "type": "image_picker",
+      "id": "cover_image",
+      "label": "Cover Image"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Video Teaser"
+    }
+  ]
+}
+{% endschema %}
+
+{% assign id = section.id %}
+
+<style>
+.video-teaser-container {
+  width: 180px;
+  height: 350px;
+  margin: auto;
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.video-cover {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.video-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.video-play-button {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  background-color: rgba(0, 0, 0, 0.6);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 11;
+}
+
+.video-play-button svg {
+  width: 30px;
+  height: 30px;
+  fill: white;
+}
+
+.video-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.video-container iframe {
+  width: 100%;
+  height: 100%;
+  display: none;
+  border: none;
+  object-fit: cover; /* Ensures the video fills the container */
+}
+
+</style>
+
+<div class="video-teaser-container" id="video-teaser-{{ id }}">
+  <div class="video-cover" id="video-cover-{{ id }}">
+    {% if section.settings.cover_image %}
+      <img src="{{ section.settings.cover_image | img_url: '400x' }}" alt="Video Cover">
+    {% endif %}
+    <div class="video-play-button">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <path d="M8 5v14l11-7z"/>
+      </svg>
+    </div>
+  </div>
+
+  <div class="video-container" id="video-container-{{ id }}">
+    {% assign video_url = section.settings.video_url %}
+    {% if video_url contains "youtube.com" or video_url contains "youtu.be" %}
+      {% assign video_id = video_url | split: '/' | last | split: '?' | first %}
+      <iframe
+        id="yt-video-{{ id }}"
+        src="https://www.youtube-nocookie.com/embed/{{ video_id }}?autoplay=0&controls=1&modestbranding=1&rel=0&showinfo=0&iv_load_policy=3&fs=0&disablekb=1&playsinline=1"
+        frameborder="0"
+        allow="autoplay; encrypted-media"
+        allowfullscreen
+      ></iframe>
+    {% elsif video_url contains "tiktok.com" %}
+      <blockquote class="tiktok-embed" cite="{{ video_url }}" style="display: none;">
+        <section></section>
+      </blockquote>
+      <script async src="https://www.tiktok.com/embed.js"></script>
+    {% endif %}
+  </div>
+</div>
+
+<script>
+// JavaScript to handle video play and loop for YouTube
+(function () {
+  document.addEventListener("DOMContentLoaded", function () {
+    var id = "{{ id }}";
+    var cover = document.getElementById("video-cover-" + id);
+    var container = document.getElementById("video-container-" + id);
+    var iframe = container.querySelector("iframe");
+    var tiktok = container.querySelector("blockquote");
+
+    // Check for YouTube iframe
+    if (iframe) {
+      // Create YouTube player and enable looping
+      var player;
+
+      // Load the YouTube API
+      var tag = document.createElement('script');
+      tag.src = "https://www.youtube.com/iframe_api";
+      var firstScriptTag = document.getElementsByTagName('script')[0];
+      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+      window.onYouTubeIframeAPIReady = function () {
+        player = new YT.Player(iframe.id, {
+          events: {
+            'onStateChange': function (event) {
+              // Loop video when finished
+              if (event.data === YT.PlayerState.ENDED) {
+                player.seekTo(0); // Restart video
+                player.playVideo(); // Play again
+              }
+            }
+          }
+        });
+      };
+    }
+
+    // Video play on cover click
+    if (cover) {
+      cover.addEventListener("click", function () {
+        cover.style.display = "none";
+
+        if (iframe) {
+          iframe.style.display = "block";
+          let src = iframe.src.replace("autoplay=0", "autoplay=1");
+          iframe.src = "";
+          iframe.src = src;
+        }
+
+        if (tiktok) {
+          tiktok.style.display = "block";
+        }
+      });
+    }
+  });
+})();
+</script>

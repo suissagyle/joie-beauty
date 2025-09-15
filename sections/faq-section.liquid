@@ -1,0 +1,147 @@
+{% schema %}
+{
+  "name": "FAQ Section",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Global Color Scheme"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Link"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "faq_item",
+      "name": "Question",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question"
+        },
+        {
+          "type": "richtext",
+          "id": "answer",
+          "label": "Answer",
+          "default": "<p>Answer goes here.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "FAQ Section",
+      "blocks": [
+        {
+          "type": "faq_item",
+          "settings": {
+            "question": "What is your return policy?",
+            "answer": "<p>We accept returns within 30 days of purchase.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+<style>
+.faq-section {
+  gap: 20px;
+}
+.faq-item {
+  border-bottom: 1px solid #00000036;
+  padding: 0;
+}
+.faq-question {
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.icon {
+  color: #000;
+}
+  
+.faq-answer {
+  display: none;
+  padding-top: 10px;
+}
+
+.faq-answer p {
+  font-size: 20px;
+}
+
+.faq-left p a {
+    text-decoration: underline;
+}
+.faq-left p {
+    margin: 0;
+}
+
+@media(max-width: 1024px) {
+  .faq-section {
+    padding: 30px;
+  }
+  .faq-section p {
+     line-height: normal;
+  }
+  .faq-answer p {
+    font-size: 14px;
+  }
+  .faq-left {
+    margin-bottom: 30px;
+  }  
+  .faq-right {
+    margin-bottom: 30px;
+  }
+}
+</style>
+<section class="color-{{ section.settings.color_scheme }} p-50 p-0-mobile">
+  <div class="section-container faq-section d-flex">
+    <div class="faq-left w-30">
+      <h2 class="m-0 mb-4">{{ section.settings.title }}</h2>
+      <p>{{ section.settings.description }}</p>
+    </div>
+    <div class="faq-right w-70">
+      {% for block in section.blocks %}
+        <div class="faq-item" id="faq-{{ forloop.index }}">
+          <h4 class="faq-question" onclick="toggleFAQ({{ forloop.index }})">
+            {{ block.settings.question }}
+            <span class="icon">+</span>
+          </h4>
+          <div class="faq-answer">
+            <p>{{ block.settings.answer }}</p>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+<script>
+function toggleFAQ(index) {
+  var answer = document.querySelector('#faq-' + index + ' .faq-answer');
+  var icon = document.querySelector('#faq-' + index + ' .icon');
+  if (answer.style.display === 'none' || answer.style.display === '') {
+    answer.style.display = 'block';
+    icon.textContent = '-';
+  } else {
+    answer.style.display = 'none';
+    icon.textContent = '+';
+  }
+}
+</script>

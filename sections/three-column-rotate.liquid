@@ -1,0 +1,330 @@
+{% schema %}
+{
+  "name": "Three Column Rotate",
+  "settings": [
+    {
+      "type": "text",
+      "id": "section_name",
+      "label": "Secion Name"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "row1_col1",
+      "name": "Row 1 Col 1: Title",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Title", "default": "Don’t know which color you are?" },
+        { "type": "textarea", "id": "paragraph", "label": "Paragraph" , "default": "Get a professional grade colour consultation with a complete makeup guide designed for your skintone. "},
+        { "type": "text", "id": "button_label", "label": "Button Label", "default": "Buy now"  },
+        { "type": "url", "id": "button_link", "label": "Button Link" }
+      ]
+    },
+    {
+      "type": "row1_col2",
+      "name": "Row 1 Col 2: 4 Images",
+      "settings": [
+        { "type": "image_picker", "id": "image_top", "label": "Top Image" },
+        { "type": "image_picker", "id": "image_right", "label": "Right Image" },
+        { "type": "image_picker", "id": "image_bottom", "label": "Bottom Image" },
+        { "type": "image_picker", "id": "image_left", "label": "Left Image" }
+      ]
+    },
+    {
+      "type": "row1_col3",
+      "name": "Row 1 Col 3: Best Deal",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Select Product"
+        },
+        {
+          "type": "text",
+          "id": "subheading",
+          "label": "Product Subheading",
+          "default": "Limited time only!"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button Label",
+          "default": "Shop Now"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    { "name": "Three Column Rotate", "blocks": [ { "type": "row1_col1" }, { "type": "row1_col2" }, { "type": "row1_col3" } ] }
+  ]
+}
+{% endschema %}
+
+<style>
+  .two-row-section {
+    flex-direction: column;
+    padding: 20px;
+  }
+  .column {
+    flex: 1;
+    min-height: 680px;
+    padding: 20px;
+    align-content: center;
+  }
+
+
+  .two-row-section li {
+    list-style: none;
+    position: relative;
+    padding-left:50px;
+    color: #000;
+    text-shadow: 0px 2px 5px rgba(255, 255, 255, 0.05);
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 275;
+    line-height: 26px; /* 162.5% */
+    letter-spacing: 0.75px;
+    border-bottom: 1px solid #00000021;
+    padding: 20px;
+  }
+  .two-row-section li:before {
+    width: 8px;
+    height: 8px;
+    content:"\f111"; 
+    font-family: FontAwesome;
+    position: absolute;
+    left: 0;
+    color: #F7A8A8;
+    font-size: 8px;
+  }
+  .show-image {
+    transition: all 0.7s ease-in-out;
+  }
+
+  .diamond-image-wrapper {
+    position: relative;
+    width: 350px;
+    height: 350px;
+    margin: 0 auto;
+  }
+  
+  .diamond-img {
+    position: absolute;
+    width: 160px;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: all 1s ease-in-out;
+  }
+  
+  .diamond-img.top    { top: 0; left: 35%; transform: translateX(-50%); }
+  .diamond-img.top {
+    width: 150px;
+    height: 150px;
+  }
+  .diamond-img.right  { top: 60%; right: 0; transform: translateY(-50%); }
+  .diamond-img.bottom { bottom: 0; left: 60%; transform: translateX(-50%); }
+  .diamond-img.bottom {
+    width: 150px;
+    height: 150px;
+  }
+  .diamond-img.left   { top: 50%; left: 0; transform: translateY(-50%); }
+  
+  .diamond-image-wrapper.rotate .top    { top: 40%; left: 0; transform: translateY(-50%); }  /* → Left */
+  .diamond-image-wrapper.rotate .left   { bottom: 0; left: 35%; transform: translateX(-50%); } /* → Bottom */
+  .diamond-image-wrapper.rotate .bottom { top: 65%; right: 0; transform: translateY(-50%); } /* → Right */
+  .diamond-image-wrapper.rotate .right  { top: 0; left: 50%; transform: translateX(-50%); }  /* → Top */
+
+  .best-deal-wrapper {
+    padding: 30px;
+    text-align: left;
+    background-color: white;
+    border-radius: 15px;
+  }
+
+  .product-promo .caption {
+    text-align: center;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 150%; /* 21px */
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    background: var(--Gradient, linear-gradient(90deg, var(--color-supportive-seasonal-color-light-spring-warm-rose-pink, #F7A8A8) 0%, var(--color-supportive-seasonal-color-true-spring-coral-pink, #F76C6C) 25%, var(--color-supportive-seasonal-color-bright-spring-bright-peachy-pink, #FF8484) 40%, var(--color-supportive-seasonal-color-light-summer-soft-pink-rose, #E1A2A2) 55%, var(--color-supportive-seasonal-color-true-summer-cool-rose-pink, #CC7B7B) 85%, var(--color-supportive-seasonal-color-soft-summer-muted-mauve-pink, #C69CA3) 100%));
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .best-deal-wrapper ul {
+    padding-left: 0;
+  }
+
+  .best-deal-wrapper li {
+    border-bottom: 0 !important;
+    padding: 0 5px !important;
+  }
+
+  .best-deal-wrapper ul li::before {
+    color: #F7A8A8;
+    width: 3px;
+    height: 3px;
+    font-size: 7px;
+    padding: 0;
+  }
+
+  
+  .product-promo .product-title {
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px; /* 83.333% */
+    letter-spacing: 0.25px;
+    background: var(--Gradient, linear-gradient(90deg, var(--color-supportive-seasonal-color-light-spring-warm-rose-pink, #F7A8A8) 0%, var(--color-supportive-seasonal-color-true-spring-coral-pink, #F76C6C) 25%, var(--color-supportive-seasonal-color-bright-spring-bright-peachy-pink, #FF8484) 40%, var(--color-supportive-seasonal-color-light-summer-soft-pink-rose, #E1A2A2) 55%, var(--color-supportive-seasonal-color-true-summer-cool-rose-pink, #CC7B7B) 85%, var(--color-supportive-seasonal-color-soft-summer-muted-mauve-pink, #C69CA3) 100%));
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  .product-promo .product-price {
+    color: #000;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 300;
+    line-height: 18px; /* 112.5% */
+    letter-spacing: -0.176px;
+  }
+  
+  .product-promo .product-subheading {
+    color: #000;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 300;
+    line-height: 24px; /* 150% */
+    letter-spacing: -0.176px;
+  }
+
+  
+  @media(max-width: 1024px) {
+    .product-promo .product-title {
+      line-height: normal;
+    }
+    .section-p {
+      color: #000;
+    }
+    .two-row-section li {
+      line-height: 14px;
+    }
+    .two-row-section .caption li {
+      border-bottom: 0;
+      padding: 0 15px;
+    }
+    .two-row-section .caption li::before {
+      width: 3px;
+      height: 3px;
+      font-size: 7px;
+      padding: 0;
+    }
+    .two-row-section.image .column {
+      min-height: 180px;
+      padding-bottom: 30px;
+      flex: auto;
+      align-content: baseline;
+    }
+    .two-row-section.image .column ul {
+      padding-left: 0;
+    }
+    .two-row-section.image .row1 {
+      display: flex;
+      flex-wrap: wrap;
+      flex-direction: row;
+      text-align: center;
+    }
+    .two-row-section.image .buy-button {
+      margin: 0 auto;
+    }
+    .diamond-image-wrapper.rotate .left {
+      left: 35%;
+    }
+    .diamond-img.bottom {
+      left: 50%;
+    }
+  }
+</style>
+<section id="{{ section.settings.section_name }}" class="two-row-section image rotate" style="background-color: {{ section.settings.background_color }};">
+  <div class="section-container p-0 d-flex">
+    <div class="d-flex w-100 m-auto w-80">
+      <div class="column w-33 d-flex flex-wrap align-items-center align-content-center">
+        <span class="row1 w-100">
+          <h2 class="m-0">{{ section.blocks[0].settings.title }}</h2>
+          <p>{{ section.blocks[0].settings.paragraph }}</p>
+          <span class="w-100 d-block">
+            <a href="{{ section.blocks[0].settings.button_link }}" class="buy-button">{{ section.blocks[0].settings.button_label }}</a>
+          </span>
+        </span>
+      </div>
+      <div class="column w-33 center">
+        <div class="diamond-image-wrapper" id="diamond-rotation">
+          <img class="diamond-img top" src="{{ section.blocks[1].settings.image_top | img_url: 'medium' }}" alt="Diamond Image"/>
+          <img class="diamond-img right" src="{{ section.blocks[1].settings.image_right | img_url: 'medium' }}" alt="Diamond Image"/>
+          <img class="diamond-img bottom" src="{{ section.blocks[1].settings.image_bottom | img_url: 'medium' }}" alt="Diamond Image"/>
+          <img class="diamond-img left" src="{{ section.blocks[1].settings.image_left | img_url: 'medium' }}" alt="Diamond Image"/>
+        </div>
+      </div>
+      <div class="column w-33 p-0-mobile product-promo text-center">
+        <div class="best-deal-wrapper">
+          <ul class="m-0 mb-4 d-flex align-items-center"><li>&nbsp;</li><span class="caption"> Best Deal</span></ul>
+          {% assign product = all_products[section.blocks[2].settings.product] %}
+          {% if product %}
+            <h3 class="product-title m-0 mb-2">{{ product.title }}</h3>
+            <p class="product-price m-0 mb-2">{{ product.price | money }} 
+              {% if product.compare_at_price > product.price %}
+                <span class="ms-10 slash">{{ product.compare_at_price | money }}</span>
+              {% endif %}
+            </p>
+            <p class="product-subheading m-0">{{ section.blocks[2].settings.subheading }}</p>
+            <a href="{{ section.blocks[2].settings.button_link }}" class="buy-button-deal pink">
+              {{ section.blocks[2].settings.button_label }}
+            </a>
+          {% else %}
+            <p>Please select a product</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const diamond = document.getElementById("diamond-rotation");
+
+    if (!diamond) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            diamond.classList.add("rotate");
+          } else {
+            diamond.classList.remove("rotate");
+          }
+        });
+      },
+      { threshold: 0.6 }
+    );
+
+    observer.observe(diamond);
+  });
+
+</script>
+

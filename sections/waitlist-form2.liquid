@@ -1,0 +1,131 @@
+{% schema %}
+{
+  "name": "Waitlist Section Form",
+  "settings": [
+    { "type": "image_picker", "id": "background_image", "label": "Upload Background Image" },
+    { "type": "image_picker", "id": "logo_image", "label": "Upload Logo" },
+    { "type": "range", "id": "logo_width", "label": "Logo Width (%)", "min": 10, "max": 100, "default": 50, "step": 5 },
+    { "type": "text", "id": "form_title", "label": "Form Title", "default": "Join Our Waitlist" },
+    { "type": "text", "id": "form_subheading", "label": "Form Subheading", "default": "Be the first to know!" },
+    { "type": "textarea", "id": "form_description", "label": "Form Description" },
+    { "type": "text", "id": "button_label", "label": "Button Label", "default": "Submit" },
+    { "type": "image_picker", "id": "color_image", "label": "Color Image (Revealed after submission)" },
+    { "type": "range", "id": "section_width", "label": "Section Width (%)", "min": 30, "max": 100, "default": 50, "step": 5 },
+    { "type": "range", "id": "section_height", "label": "Section Height (%)", "min": 50, "max": 100, "default": 75, "step": 5 }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Grayscale Image",
+      "settings": [
+        { "type": "image_picker", "id": "grayscale_image", "label": "Upload Grayscale Image" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Waitlist Section Form",
+      "category": "Custom" 
+    }
+  ]
+}
+{% endschema %}
+
+<div class="waitlist-section" style="width: {{ section.settings.section_width }}%; height: {{ section.settings.section_height }}vh; background-image: url('{{ section.settings.background_image | img_url: '1920x1080' }}'); background-size: cover; background-position: center;">
+  <div class="overlay"></div>
+  <div class="form-container">
+     <form class="waitlist-form mt-4" >
+       {% if section.settings.logo_image %}
+        <div class="logo" style="background-image:url('{{ section.settings.logo_image | img_url: '300x' }}'); width: {{ section.settings.logo_width }}%;"></div>
+       {% endif %}
+       
+      <h2>{{ section.settings.form_title }}</h2>
+      <h3>{{ section.settings.form_subheading }}</h3>
+      <p>{{ section.settings.form_description }}</p>
+       <div class="field-form d-flex mt-4">
+          <span class="email-icon"></span>
+          <input type="email" name="email" id="waitlist-email" placeholder="Email"/>
+       </div>
+       <button type="button" id="submit-waitlist" class="submit-btn mt-4">Submit</button>
+       <p id="success-message" style="display: none;">✅ Thank you! You're on the waitlist.</p>
+    </form>
+  
+    <form class="waitlist-form2 mobile d-flex">
+     {% if section.settings.logo_image %}
+        <div class="logo mobile"></div>
+      {% endif %}
+      <div class="center-button">
+        <h2>{{ section.settings.form_title }}</h2>
+        <button type="submit" class="mobile-btn mt-4">Join JOIE</button>
+      </div>
+      <span class="w-100">
+        <h3>{{ section.settings.form_subheading }}</h3>
+        <p>{{ section.settings.form_description }}</p>
+      </span>
+    </form>
+  </div>
+  <div class="wrapper">
+    <div class="swiper-container">
+		<div class="swiper-wrapper">
+          {% for block in section.blocks %}
+            {% if block.settings.grayscale_image %}
+			<div class="swiper-slide">
+              <img src="{{ block.settings.grayscale_image | img_url: '500x' }}" class="grayscale" alt="slide">
+            </div>
+			{% endif %}
+          {% endfor %}
+		</div>
+	</div>
+    {% if section.settings.color_image %}
+        <img src="{{ section.settings.color_image | img_url: '500x' }}" id="color-image" class="hidden">
+    {% endif %}
+  </div>
+
+</div>
+
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+<script>
+  const waitListForm = document.getElementById('waitlist-form');
+  if(waitListForm) {
+    waitListForm.addEventListener('submit', function(event) {
+      event.preventDefault();
+  
+      let email = document.getElementById('waitlist-email').value;
+      let formMessage = document.getElementById('waitlist-message');
+  
+      // Validate reCAPTCHA
+      let recaptchaResponse = grecaptcha.getResponse();
+      if (!recaptchaResponse) {
+          formMessage.innerText = "Please verify you're not a robot.";
+          formMessage.style.display = "block";
+          formMessage.style.color = "red";
+          return;
+      }
+  
+      fetch('/account', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ customer: { email: email, tags: "Waitlist" } })
+      })
+      .then(response => {
+          if (response.ok) {
+              formMessage.innerText = "You've been added to the waitlist!";
+              formMessage.style.display = "block";
+              formMessage.style.color = "green";
+              document.getElementById('waitlist-form').reset();
+              grecaptcha.reset(); // Reset reCAPTCHA
+          } else {
+              formMessage.innerText = "Error. Please try again.";
+              formMessage.style.display = "block";
+              formMessage.style.color = "red";
+          }
+      })
+      .catch(error => {
+          formMessage.innerText = "Network error. Try again later.";
+          formMessage.style.display = "block";
+          formMessage.style.color = "red";
+      });
+    });
+  }
+</script>
+

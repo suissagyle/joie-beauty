@@ -1,0 +1,280 @@
+{% schema %}
+{
+  "name": "Stepper Section",
+  "settings": [
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color Scheme"
+    },
+    {
+      "type": "textarea",
+      "id": "left_column_title",
+      "label": "Left Column Title",
+      "default": "Three days, get your package"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Step",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Step Icon"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Step Title"
+        },
+        {
+          "type": "textarea",
+          "id": "caption",
+          "label": "Step Caption"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Stepper Section",
+      "category": "Custom",
+      "blocks": [
+        {
+          "type": "step",
+          "settings": {
+            "title": "Day 01",
+            "caption": "Place Order"
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "title": "Day 02",
+            "caption": "Receive Kit at Home"
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "title": "Day 03",
+            "caption": "Do test on your phone"
+          }
+        },
+        {
+          "type": "step",
+          "settings": { 
+            "title": "Day 04",
+            "caption": "Get results instantly"
+          }
+        },
+        {
+          "type": "step",
+          "settings": { 
+            "title": "Day 05",
+            "caption": "Lipgloss delivered"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+<style>
+  .stepper-section {
+    padding: 20px;
+    background-color: {{ section.settings.background_color }};
+  }
+  .stepper-container {
+    width: 98%;
+    max-width: 1440px;
+    padding: 4rem 5rem;
+    min-height: 280px;
+    border: 2px solid var(--c-secondary);
+    border-radius: 20px;
+    background: Linear-gradient(0.25turn, #FFF, #FFF, #FFF7F7);
+    box-shadow: 0px 0px 12px 0px rgba(255, 200, 200, 0.40);
+  }
+  .stepper-content {
+    gap: 20px;
+  }
+
+  .step-container {
+    position: relative;
+    margin-top: 100px;
+  }
+
+  .step-indicator {
+    margin-top: 50px;
+    display: flex;
+    align-items: center;
+    padding: 0 40px;
+  }
+  
+  .step {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    position: relative;
+    z-index: 1;
+    transition:  all 0.5s;
+  }
+
+  .step .p {
+    left: 0;
+    min-width: 275px;
+    min-height: 80px;
+    position: absolute;
+    color: #000;
+    font-style: normal;
+    font-weight: 275;
+    line-height: 25px;
+    align-items: center;
+    letter-spacing: -0.198px;
+  }
+
+  .step.odd .p{
+    bottom: -70px;
+  }
+  
+  .step.even .p{
+    top: -80px;
+  }
+  
+  .step-indicator .step-icon {
+    height: 20px;
+    width: 20px;
+    display: block !important;
+    border-radius: 50%;
+    border: 2px solid #CC7B7B;
+    background: #fff;
+    font-size: 10px;
+    text-align: center;
+    color: #ffffff;
+    position: relative;
+    line-height: 50px;
+    font-size: 20px;
+  }
+  
+  
+    
+  .step.step2 .p,
+  .step.step3 .p {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  
+  .indicator-line {
+    width: 100%;
+    height: 2px;
+    background: #CC7B7B;
+    display: block !important;
+    flex: 1;
+  }
+  
+  .indicator-line.active {
+    background: #CC7B7B;
+  }
+  
+ @media (max-width: 1024px) {
+   .stepper-container {
+    padding: 4rem 2rem;
+   }
+  .step-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-top: 0;
+    margin-bottom: 30px;
+  }
+  .step {
+    height: 80px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+  }
+   .step .p {
+    flex-wrap: nowrap;
+   }
+   .step .p img {
+      margin-top: 10px;
+    }
+   .step.odd .p {
+    bottom: 5px;
+    left: 30px;
+    }
+   .step.even .p {
+      top: -5px;
+      left: 30px;
+    }
+  .step-indicator {
+    flex-direction: column;
+    align-items: center;
+    padding: 0px 10px;
+    margin-top: 0;
+  }
+  .step-icon {
+    margin-bottom: 10px;
+  }
+  .indicator-line {
+    width: 2px;
+    height: auto;
+    left: 20px;
+    top: 0;
+    bottom: 0;
+    position: absolute;
+  }
+}
+</style>
+
+<section class="stepper-section">
+    <div class="stepper-container m-auto color-{{ section.settings.color_scheme }}">
+      <div class="stepper-content d-flex">
+          <div class="stepper-left w-30">
+          <h2>{{ section.settings.left_column_title }}</h2>
+        </div>
+        <div class="stepper-right w-70">
+          <div class="step-container">
+            <section class="step-indicator">
+              {% for block in section.blocks %}
+                <div class="step step1 active">
+                    <div class="step-icon"></div>
+                    <span class="p d-flex">
+                      <span class="w-10"><img src="{{ block.settings.icon | img_url: '30x30' }}" alt="{{ block.settings.title }}"></span>
+                      <span class="w-90 pl-1">
+                        <h6 class="m-0">{{ block.settings.title }}</h6>
+                        <h6 class="m-0">{{ block.settings.caption }}</h6>
+                      </span>
+                    </span>
+                </div>
+                <div class="indicator-line active"></div>
+              {% endfor %}
+            </section>   
+          </div>
+        </div>
+      </div>
+    </div>
+</section>
+
+<script>
+  $(document).ready(function() {
+    $(".step").each(function(index) {
+      if ((index + 1) % 2 === 0) {
+        $(this).addClass("even");
+      } else {
+        $(this).addClass("odd");
+      }
+    });
+  });
+
+</script>

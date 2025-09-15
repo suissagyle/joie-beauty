@@ -1,0 +1,98 @@
+{% schema %}
+{
+  "name": "Custom Header",
+  "settings": [
+    {
+      "type": "text",
+      "id": "buy_now_text",
+      "label": "Buy Now Button Text",
+      "default": "Buy Now"
+    },
+    {
+      "type": "url",
+      "id": "buy_now_link",
+      "label": "Buy Now Button Link"
+    },
+    {
+      "type": "image_picker",
+      "id": "mobile_menu_icon",
+      "label": "Mobile Menu Icon"
+    },
+    {
+      "type": "richtext",
+      "id": "copyright_text",
+      "label": "Copyright Text"
+    },
+    {
+      "type": "header",
+      "content": "Social Media Links"
+    },
+    {
+      "type": "url",
+      "id": "facebook_link",
+      "label": "Facebook Link"
+    },
+    {
+      "type": "url",
+      "id": "instagram_link",
+      "label": "Instagram Link"
+    },
+    {
+      "type": "url",
+      "id": "twitter_link",
+      "label": "Twitter Link"
+    }
+  ]
+}
+{% endschema %}
+
+<header class="site-header">
+  <div class="header-container">
+    <div class="logo">{{ shop.name | link_to: '/' }}</div>
+    <nav class="desktop-menu">
+      <ul>
+        {% for link in linklists.main-menu.links %}
+          <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+        {% endfor %}
+        <li><a href="{{ section.settings.buy_now_link }}" class="buy-now-btn">{{ section.settings.buy_now_text }}</a></li>
+      </ul>
+    </nav>
+    <div class="mobile-menu-btn">
+      <button onclick="toggleMobileMenu()">☰</button>
+    </div>
+  </div>
+</header>
+
+<div id="mobile-menu" class="mobile-menu hidden">
+  <button onclick="toggleMobileMenu()" class="close-btn">✖</button>
+  <ul>
+    {% for link in linklists.main-menu.links %}
+      <li>
+        {% if section.settings.mobile_menu_icon %}
+          <img src="{{ section.settings.mobile_menu_icon | img_url: '30x30' }}" alt="Menu Icon">
+        {% endif %}
+        <a href="{{ link.url }}">{{ link.title }}</a>
+      </li>
+    {% endfor %}
+  </ul>
+  <div class="social-icons">
+    <a href="{{ section.settings.facebook_link }}">FB</a>
+    <a href="{{ section.settings.instagram_link }}">IG</a>
+    <a href="{{ section.settings.twitter_link }}">X</a>
+  </div>
+  <div class="copyright">{{ section.settings.copyright_text }}</div>
+</div>
+
+<style>
+  .site-header { display: flex; justify-content: space-between; align-items: center; padding: 15px; }
+  .desktop-menu ul { display: flex; gap: 15px; }
+  .buy-now-btn { background: #ff0000; color: white; padding: 8px 12px; }
+  .mobile-menu { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: white; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  .mobile-menu.hidden { display: none; }
+</style>
+
+<script>
+  function toggleMobileMenu() {
+    document.getElementById('mobile-menu').classList.toggle('hidden');
+  }
+</script>

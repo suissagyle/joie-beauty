@@ -1,0 +1,112 @@
+{% schema %}
+  {
+    "name": "Varian Swatch Picker",
+    "settings": []
+  }
+{% endschema %}
+
+
+<div class="custom-variant-picker">
+  <div class="custom-swatch-wrapper">
+    {% for variant in product.variants %}
+      {% assign color = variant.metafields.custom.color_swatch.value %}
+      {% assign color_name = variant.metafields.custom.color_name.value %}
+      {% assign collection_name = variant.metafields.custom.collection_name.value %}
+      {% assign images = variant.metafields.custom.variant_images.value %}
+      {% assign variant_price = variant.price | money %}
+
+      <div
+        class="swatch-circle"
+        style="background-color: {{ color }};"
+        data-variant-id="{{ variant.id }}"
+        data-color-name="{{ color_name }}"
+        data-collection-name="{{ collection_name }}"
+        data-price="{{ variant_price }}"
+        data-images='[
+          {% for image in images %}
+            "{{ image | image_url: width: 800 }}"
+            {% unless forloop.last %},{% endunless %}
+          {% endfor %}
+        ]'
+        title="{{ color_name }}"
+      ></div>
+    {% endfor %}
+  </div>
+
+  <div class="product-info-meta" style="margin-top: 1rem;">
+    <div><strong>Color:</strong> <span class="variant-color-name">—</span></div>
+    <div><strong>Collection:</strong> <span class="variant-collection-name">—</span></div>
+    <div><strong>Price:</strong> <span class="variant-price">—</span></div>
+  </div>
+
+  <div id="variant-gallery" style="margin-top: 1rem; display: flex; gap: 10px; flex-wrap: wrap;"></div>
+</div>
+
+<style>
+  .custom-swatch-wrapper {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+  }
+  .swatch-circle {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 2px solid #ddd;
+    cursor: pointer;
+    transition: border 0.2s ease;
+  }
+  .swatch-circle.active {
+    border: 2px solid #000;
+  }
+  #variant-gallery img {
+    width: 100px;
+    height: auto;
+    border-radius: 8px;
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const swatches = document.querySelectorAll('.swatch-circle');
+
+    function activateSwatch(swatch) {
+      swatches.forEach(el => el.classList.remove('active'));
+      swatch.classList.add('active');
+
+      // Update product info
+      document.querySelector('.variant-color-name').textContent = swatch.dataset.colorName;
+      document.querySelector('.variant-collection-name').textContent = swatch.dataset.collectionName;
+      document.querySelector('.variant-price').textContent = swatch.dataset.price;
+
+      // Update gallery
+      const gallery = document.getElementById('variant-gallery');
+      const images = JSON.parse(swatch.dataset.images);
+      gallery.innerHTML = '';
+      images.forEach(src => {
+        const img = document.createElement('img');
+        img.src = src;
+        gallery.appendChild(img);
+      });
+
+      // Optionally update variant selector
+      const variantId = swatch.dataset.variantId;
+      const input = document.querySelector(`input[name="id"]`);
+      if (input) {
+        input.value = variantId;
+      }
+    }
+
+    // Set first swatch as active by default
+    if (swatches.length > 0) {
+      activateSwatch(swatches[0]);
+    }
+
+    swatches.forEach(swatch => {
+      swatch.addEventListener('click', () => {
+        activateSwatch(swatch);
+      });
+    });
+  });
+</script>

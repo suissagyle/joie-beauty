@@ -1,0 +1,757 @@
+{% schema %}
+{
+  "name": "Two-Column Slider",
+  "blocks": [
+    {
+      "type": "left-slider",
+      "name": "Left Column",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "left_column_background",
+          "label": "Left Column Background Image"
+        },
+        
+        {
+          "type": "text",
+          "id": "left_column_title",
+          "label": "Title"
+        },
+        {
+          "type": "text",
+          "id": "left_column_description",
+          "label": "Image Description"
+        },
+        {
+          "type": "text",
+          "id": "left_column_text_link_label",
+          "label": "Text Link Label"
+        },
+        {
+          "type": "url",
+          "id": "left_column_text_link",
+          "label": "Text Link"
+        },
+        {
+          "type": "header",
+          "content": "Fade Slider Images"
+        },
+        {
+          "type": "image_picker",
+          "id": "left_column_image_1",
+          "label": "Carousel Image 1"
+        },
+        {
+          "type": "image_picker",
+          "id": "left_column_image_2",
+          "label": "Carousel Image 2"
+        },
+        {
+          "type": "image_picker",
+          "id": "left_column_image_3",
+          "label": "Carousel Image 3"
+        },
+        {
+          "type": "image_picker",
+          "id": "left_column_image_4",
+          "label": "Carousel Image 4"
+        },
+        {
+          "type": "image_picker",
+          "id": "left_column_image_5",
+          "label": "Carousel Image 5"
+        }
+        
+      ]
+    },
+    {
+      "type": "right-slider",
+      "name": "Right Column",
+      "settings": [
+        {
+          "type": "header",
+          "content": "Right Column Settings"
+        },
+        {
+          "type": "text",
+          "id": "right_column_title",
+          "label": "Title"
+        },
+        {
+          "type": "text",
+          "id": "right_column_text_link_label",
+          "label": "Text Link Label"
+        },
+        {
+          "type": "url",
+          "id": "right_column_text_link",
+          "label": "Text Link"
+        },
+        {
+          "type": "text",
+          "id": "right_column_button_label_1",
+          "label": "Button Label 1"
+        },
+        {
+          "type": "url",
+          "id": "right_column_button_link_1",
+          "label": "Button Link 1"
+        },
+        {
+          "type": "text",
+          "id": "right_column_button_label_2",
+          "label": "Button Label 2"
+        },
+        {
+          "type": "url",
+          "id": "right_column_button_link_2",
+          "label": "Button Link 2"
+        },
+        {
+          "type": "header",
+          "content": "Image Slider"
+        },
+        {
+          "type": "image_picker",
+          "id": "right_column_background",
+          "label": "Background Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "right_column_background_mobile",
+          "label": "Mobile Background Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "right_column_image_1",
+          "label": "Slider Image 1"
+        },
+        {
+          "type": "text",
+          "id": "right_column_image_caption_1",
+          "label": "Slider Caption 1"
+        },
+        {
+          "type": "url",
+          "id": "right_column_image_link_1",
+          "label": "Slider 1 Link"
+        },
+        {
+          "type": "image_picker",
+          "id": "right_column_image_2",
+          "label": "Slider Image 2"
+        },
+        {
+          "type": "text",
+          "id": "right_column_image_caption_2",
+          "label": "Slider Caption 2"
+        },
+        {
+          "type": "url",
+          "id": "right_column_image_link_2",
+          "label": "Slider 2 Link"
+        },
+        {
+          "type": "image_picker",
+          "id": "right_column_image_3",
+          "label": "Slider Image 3"
+        },
+        {
+          "type": "text",
+          "id": "right_column_image_caption_3",
+          "label": "Slider Caption 3"
+        },
+        {
+          "type": "url",
+          "id": "right_column_image_link_3",
+          "label": "Slider 3 Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Two-Column Slider"
+    }
+  ]
+}
+{% endschema %}
+
+
+<div class="custom-section d-flex">
+  <div class="left-column" style="background-image: url('{{ section.blocks[0].settings.left_column_background | img_url: 'master' }}');">
+    <div class="fade-carousel">
+      {% for i in (1..3) %}
+        {% assign desktop_img_id = 'left_column_image_' | append: i %}
+      
+        {% if section.blocks[0].settings[desktop_img_id] %}
+          <img 
+            src="{{ section.blocks[0].settings[desktop_img_id] | img_url: 'master' }}" 
+            alt="Desktop Slide Image {{ i }}" 
+            class="fade-slide slide-desktop"
+          />
+        {% endif %}
+      {% endfor %}
+    </div>
+    <div class="left-content d-flex">
+      <div>
+         <h3>{{ section.blocks[0].settings.left_column_title }}</h3>
+         <a class="text-link" href="{{ section.blocks[0].settings.left_column_button_link }}">{{ section.blocks[0].settings.left_column_text_link_label }} </a>
+      </div>
+      <p>{{ section.blocks[0].settings.left_column_description }}</p>
+    </div>
+  </div>
+  <div class="right-column" style="background-image: url('{{ section.blocks[1].settings.right_column_background | img_url: 'master' }}');">
+    <h2>{{ section.blocks[1].settings.right_column_title }}</h2>
+    <div class="image-container w-100 d-block text-center">
+     <div class="wrapper">
+        <div class="swiper-container">
+          <div class="swiper-wrapper">
+             {% for i in (1..3) %}
+              {% assign image_id = 'right_column_image_' | append: i %}
+              {% assign caption_id = 'right_column_image_caption_' | append: i %}
+              {% assign link = 'right_column_image_link_' | append: i %}
+              {% if section.blocks[1].settings[image_id] %}
+                  <div class="swiper-slide">
+                    <a href="{{ section.blocks[1].settings[link] }}">
+                      <img src="{{ section.blocks[1].settings[image_id] | img_url: 'master' }}" alt="Slide img"/>
+                      <p class="m-auto d-flex justify-between">
+                        {{ section.blocks[1].settings[caption_id] }} 
+                        <span class="arrow-icon"></span>
+                      </p>
+                    </a>
+                  </div>
+              {% endif %}
+              {% endfor %}
+          </div>
+        </div>
+      </div>
+  </div>
+  <div class="d-block w-100 mt-4 hidden">
+    {% if section.blocks[1].settings.right_column_button_link_1 %}
+    <a href="{{ section.blocks[1].settings.right_column_button_link_1 }}" class="white">{{ section.blocks[1].settings.right_column_button_label_1 }}</a>
+    {% endif %}
+    {% if section.blocks[1].settings.right_column_button_link_2 %}
+    <a href="{{ section.blocks[1].settings.right_column_button_link_2 }}">{{ section.blocks[1].settings.right_column_button_label_2 }}</a>
+    {% endif %}
+  </div>
+  </div>
+</div>
+<style>
+  .custom-section {
+    width: 100%;
+    height: 88vh;
+    scroll-behavior: smooth;
+    position: relative;
+  }
+  .left-column, .right-column {
+    position: absolute;
+  }
+  .left-column {
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    width: 100%;
+    background-size: cover;
+    transition: all 1.4s ease-in-out;
+  }
+  .fade-carousel img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+  .fade-slide {
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out; /* 0.5s feels quick but smooth */
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    will-change: opacity;
+    object-fit: cover;
+  }
+  .fade-slide.active {
+    opacity: 1;
+    z-index: 2;
+  }
+  .left-content {
+    display: flex;
+    flex-wrap: wrap;
+    position: absolute;
+    align-content: space-between;
+    z-index: 15;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+  }
+  .left-content div {
+    width: 100%;
+  }
+  .left-content .text-link {
+    color: #fff;
+    display: flex;
+    margin: 0;
+    font-size: 14px;
+    align-items: center;
+    background-color: transparent;
+  }
+  .left-content h3 {
+    color: #FFF;
+    margin: 0;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 300;
+    line-height: normal;
+    letter-spacing: 3px;
+    text-transform: capitalize;
+  }
+  .left-content p {
+    color: #fff;
+    margin: 0;
+    font-size: 14px;
+  }
+  .left-content button {
+    color: #FFF;
+    text-align: center;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 275;
+    line-height: normal;
+    letter-spacing: 3px;
+    text-transform: capitalize;
+  }
+  
+  .arrow-icon {
+    width: 20px;
+    height: 20px;
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+  .left-content .arrow-icon {
+    background-image: url('https://cdn.shopify.com/s/files/1/0690/7592/7092/files/arrow_insert.svg?v=1742787617');
+  }
+  .right-column {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    width: 53%;
+    height: 100%;
+    top: 0;
+    right: -100px;
+    opacity: 0;
+    padding: 20px;
+    background-size: cover;
+    background-position: left;
+    transition: all 0.3s ease-out;
+  }
+  .right-column h2 {
+    color: #000;
+    max-width: 680px;
+    margin: 10% auto 5%;
+    text-align: center;
+    font-family: "Poppins Light";
+    font-size: 65px;
+    font-style: normal;
+    font-weight: 300;
+    line-height: normal;
+    letter-spacing: 2px;
+    text-transform: capitalize;
+  }
+  .image-slider {
+    width: 45%;
+    clear: both;
+    margin: 10px auto 0;
+    display: block;
+    overflow: hidden;
+    gap: 10px;
+    height: 400px;
+  }
+  .right-column .swiper-slide p {
+    width: 325px;
+    bottom: -40px;
+    left: 155px;
+    height: 30px;
+    z-index: 10;
+    color: #000;
+    padding: 5px;
+    position: absolute;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 275;
+    line-height: normal;
+    letter-spacing: 3px;
+    text-transform: capitalize;
+  }
+  .swiper-slide p .arrow-icon {
+    background-image: url('https://cdn.shopify.com/s/files/1/0690/7592/7092/files/arrow_outward.svg?v=1742787648');
+  }
+  .text-link {
+    display: inline-block;
+    color: #007acc;
+    text-decoration: none;
+    margin: 10px 0;
+  }
+  .right-column a {
+    width: 420px;
+    font-size: 25px;
+    display: block;
+    background-color: transparent;
+    color: #000;
+    padding: 15px;
+    text-align: center;
+    margin: 5px auto;
+    border-radius: 10px !important;
+    text-decoration: none;
+    border: none !important;
+  }
+
+  .right-column a.white {
+    background-color: #fff;
+  }
+
+  .right-column a::before, .right-column a::after {
+    border: none;
+    box-shadow: none;
+  }
+  /* SWIPER */
+  .right-column .swiper-wrapper {
+    align-items: baseline;
+  }
+  .right-column .swiper-container {
+  	width: 1100px;
+    height: 715px;
+    padding: 20px 0;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .right-column .swiper-slide {
+    height: 560px;
+    position: relative;
+    transition: transform 1.2s ease-out, opacity 1.2s ease-out;
+  }
+
+  .right-column .swiper-slide img {
+    width: 390px;
+    height: 580px;
+    border-radius: 20px;
+    object-fit: contain;
+  }
+  
+  .right-column .swiper-slide:not(.swiper-slide-prev):not(.swiper-slide-active):not(.swiper-slide-next) {
+  	opacity: 0;
+  }
+  
+  .right-column .swiper-slide-prev, 
+  .right-column .swiper-slide-next {
+    filter: blur(2px);
+  }
+
+  .right-column .swiper-slide-prev {
+    left: 85px;
+  }
+
+  .right-column .swiper-slide-next {
+    right: 80px;
+  }
+  
+  .right-column .swiper-slide-active {
+  	transition: 0.5s all;
+    top: 0;
+  }
+  
+  .right-column .swiper-slide-active img {
+     width: 450px;
+     height: 580px;
+     object-fit: cover;
+     transition: 0.5s all;
+     filter: blur(0);
+     transform: scale(1.1); /* Slight zoom for smooth effect */
+  }
+  .right-column .swiper-slide-active p {
+    width: 480px;
+    bottom: -135px;
+    left: 90px;
+    font-size: 26px;
+  }
+
+  .swiper-slide p .arrow-icon {
+    display: none;
+  }
+
+  .swiper-slide-active p .arrow-icon {
+    display: block;
+    width: 35px;
+    height: 35px;
+  }
+  .right-column .swiper-slide-duplicate-prev,
+  .right-column .swiper-slide-duplicate-next {
+    opacity: 0
+  }
+
+  @media (max-width: 2000px) {
+    .right-column h2 {
+      font-size: 38px;
+      margin: 2% auto 0;
+      max-width: 400px;
+    }
+    .right-column .swiper-container {
+      width: 690px;
+      height: 520px;
+    }
+    .right-column .swiper-slide {
+      height: 375px;
+    }
+    .right-column .swiper-slide img {
+      width: 290px;
+      height: 420px;
+    }
+    .right-column .swiper-slide-active img {
+       width: 280px;
+       height: 420px;
+    }
+    .right-column .swiper-slide-prev {
+      left: 40px;
+    }
+    .right-column .swiper-slide-next {
+      right: 40px;
+    }
+    .right-column .swiper-slide-active p {
+      width: 300px;
+      bottom: -130px;
+      left: 65px;
+      font-size: 22px;
+    }
+    .right-column a {
+      width: 290px;
+      font-size: 16px;
+    }
+    .header__heading-logo {
+      width: 160px;
+    }
+    
+  }
+
+  
+  @media (max-width: 1440px) {
+    .right-column h2 {
+      line-height: 40px;
+    }
+    .right-column .swiper-container {
+      width: 480px;
+      height: 390px;
+    }
+    .right-column .swiper-slide {
+      height: 274px;
+    }
+     .right-column .swiper-slide img {
+      width: 220px;
+      height: 274px;
+     }
+    .right-column .swiper-slide-active img {
+      width: 255px;
+      height: 300px;
+    }
+    .right-column .swiper-slide p {
+      width: 290px;
+      bottom: -40px;
+      left: 25px;
+    }
+    .right-column .swiper-slide-active p {
+      width: 275px;
+      bottom: -110px;
+      left: 20px;
+      font-size: 14px;
+      letter-spacing: 1px;
+    }
+    .swiper-slide-active p .arrow-icon {
+      width: 20px;
+      height: 20px;
+    }
+  }
+  
+
+  @media (max-width: 1024px) {
+    .custom-section {
+      display: block;
+      overflow-x: hidden;
+      overflow-y: auto;
+      height: auto !important; /* Allow natural height */
+      -webkit-overflow-scrolling: touch; /* for iOS momentum scroll */
+    }
+    .left-column, .right-column {
+      position: relative !important;
+    }
+    .left-column {
+      top: 35px;
+      width: 100% !important;
+      height: 75vh !important;
+      display: block;
+      opacity: 1; /* Ensure it's visible */
+    }
+    .right-column {
+      height: auto;
+      background-position: unset;
+      width: 100% !important;
+      display: block !important;
+      opacity: 1;
+      left: 0;
+      z-index: 2;
+      padding: 50px 0;
+      background-image: url({{ section.blocks[1].settings.right_column_background_mobile | img_url: 'master' }}) !important;
+    }
+    .right-column .swiper-container {
+      height: 280px;
+    }
+    .right-column .swiper-slide {
+      height: 200px;
+    }
+    .right-column .swiper-slide img {
+      width: 140px;
+      height: 210px;
+      border-radius: 15px;
+    }
+    .swiper-slide.swiper-slide-active {
+      top: 0;
+    }
+    .right-column .swiper-slide-active p {
+      width: 140px;
+    }
+    .right-column .swiper-slide-active img {
+       width: 155px;
+       height: 215px;
+    }
+    .right-column .swiper-slide-active p {
+        width: 155px;
+    }
+      .right-column .swiper-slide-prev {
+      left: 0;
+    }
+  
+    .right-column .swiper-slide-next {
+      right: 0;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .custom-section {
+      height: 140vh !important;
+    }
+    
+    .right-column .swiper-container {
+      width: 400px;
+      height: 295px;
+      right: 5px;
+    }
+    .right-column .swiper-slide p {
+      width: 135px;
+      bottom: -35px;
+      left: 45px;
+    }
+    .right-column .swiper-slide-active p {
+      left: 55px;
+      width: 165px;
+      bottom: -85px;
+    }
+    .right-column a {
+      width: 240px;
+      font-size: 12px;
+    }
+  }
+
+</style>
+
+<script>
+  
+$(document).ready(function(){
+ //Home Page Banner
+ // Function to check screen size and run animation accordingly
+  function runBannerAnimation() {
+    let $leftColumn = $(".custom-section .left-column");
+    let $rightColumn = $(".custom-section .right-column");
+    
+      if (window.innerWidth > 1024) { // Only run animation on larger screens
+          setTimeout(function() {
+            $leftColumn.css("width", "50%");
+              setTimeout(function() {
+                  $rightColumn.css("z-index", "2");
+                  $rightColumn.css("opacity", "1");
+                  $rightColumn.css("right", "-20px");
+              }, 900);
+          }, 500);
+      } else {
+          // Reset styles for mobile/laptop view
+          $leftColumn.css("width", "");
+          $rightColumn.css("z-index", "");
+          $rightColumn.css("opacity", "");
+          $rightColumn.css("right", "");
+      }
+  }
+  
+  // Run animation on page load
+  runBannerAnimation();
+  
+  // Re-run when window resizes
+  window.addEventListener("resize", runBannerAnimation);
+
+  // Right Column Slider
+  var swiper = new Swiper(".swiper-container", {
+    effect: 'coverflow',
+    loop: true,
+    speed: 1500,
+    allowTouchMove: false,
+    //autoplay: true,
+    grabCursor: true,
+    centeredSlides: true,
+    centeredSlidesBounds: true, 
+    slidesPerView: 2,
+    spaceBetween: -170,
+    coverflowEffect: {
+      rotate: 0,
+      stretch: 0,
+      depth: 100,
+      modifier: 1,
+      initialSlide: 2,
+      slideShadows: true
+    }
+  });
+
+    
+});
+
+    let $slides1 = $(".fade-slide");
+    let currentSlide = 0;
+    $slides1.eq(currentSlide).addClass("active");
+    
+    function showNextSlide1() {
+      $slides1.eq(currentSlide).removeClass("active");
+      currentSlide = (currentSlide + 1) % $slides1.length;
+      $slides1.eq(currentSlide).addClass("active");
+    }
+    setInterval(showNextSlide1, 3500);
+
+    let slides = $('.slide');
+    let index = 0;
+    
+    function showSlide(i) {
+      slides.hide();
+      slides.eq(i).fadeIn();
+    }
+    
+    function nextSlide() {
+      index = (index + 1) % slides.length;
+      showSlide(index);
+    }
+    
+    showSlide(index);
+    setInterval(nextSlide, 3000);
+
+  
+</script>
+
